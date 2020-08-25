@@ -1,9 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 // Pages
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import SignUp from './pages/Signup';
 
 export default class App extends React.Component {
     render() {
@@ -17,6 +18,7 @@ export default class App extends React.Component {
                             </Switch>
                             :
                             <Switch>
+                                <Route path="/signup" component={SignUp} />
                                 <Route path="/login" component={Login} />
                                 <Redirect to="/login"></Redirect>
                             </Switch>

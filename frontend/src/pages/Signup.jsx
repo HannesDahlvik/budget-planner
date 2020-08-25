@@ -11,6 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import OtherAuth from '../components/OtherAuth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -89,6 +90,8 @@ export default function SignUp() {
             </Grid>
           </Grid>
         </form>
+
+        <OtherAuth />
       </div>
     </Container>
   );
