@@ -8,12 +8,11 @@ import {
     Checkbox,
     Link,
     Grid,
-    Box,
     Typography,
     Container
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 const classes = theme => ({
     paper: {
