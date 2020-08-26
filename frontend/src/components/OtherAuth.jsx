@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Divider, withStyles } from '@material-ui/core';
+import Firebase from '../auth';
 
 const classes = theme => ({
     otherAuthWrapper: {
@@ -19,12 +20,18 @@ const classes = theme => ({
     },
     icon: {
         fontSize: 42
+    },
+    buttonText: {
+        color: '#fff',
+        marginLeft: 15
     }
 });
 
+const fire = new Firebase();
+
 class OtherAuth extends React.Component {
     doLoginWithGoogle() {
-        console.log('google auth');
+        fire.doSignInWithGoogle().catch(err => console.error(err));
     }
 
     render() {
@@ -38,7 +45,7 @@ class OtherAuth extends React.Component {
                     <Divider className={classes.divider} />
                 </div>
                 <div className={classes.otherAuth}>
-                    <Button onClick={this.doLoginWithGoogle} className="other-auth-icon other-auth-icon-google" variant="contained" size="large"><i className="fab fa-google other-auth-icon other-auth-icon-google"></i></Button>
+                    <Button onClick={this.doLoginWithGoogle} className="other-auth-icon other-auth-icon-google" variant="contained" size="large"><i className="fab fa-google other-auth-icon other-auth-icon-google"></i><p className={classes.buttonText}>Log in with Google</p></Button>
                 </div>
             </div>
         );

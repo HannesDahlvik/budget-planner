@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import SignUp from './pages/Signup';
+import Firebase from './auth';
 
 export default class App extends React.Component {
     render() {
@@ -12,7 +13,7 @@ export default class App extends React.Component {
             <Router>
                 <Switch>
                     {
-                        fakeAuth.isAuthenticated ?
+                        new Firebase().isAuthed ?
                             <Switch>
                                 <Route path="/dashboard" component={Dashboard} />
                             </Switch>
