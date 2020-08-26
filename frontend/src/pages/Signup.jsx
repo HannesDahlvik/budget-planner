@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import OtherAuth from '../components/OtherAuth';
+import Firebase from '../auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -88,6 +89,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={CreateAccount}
           >
             Sign Up
           </Button>
@@ -104,4 +106,17 @@ export default function SignUp() {
       </div>
     </Container>
   );
+}
+
+function CreateAccount(e) {
+  e.preventDefault();
+
+  const fire = new Firebase();
+
+  const username = document.getElementById('username').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  fire.doCreateUserWithEmailAndPassword(email, password);
+
 }
