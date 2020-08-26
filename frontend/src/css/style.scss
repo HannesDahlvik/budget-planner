@@ -3,3 +3,22 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.other-auth-icon {
+    font-size: 36px;
+    font-weight: 700;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.other-auth-icon-google {
+    background-color: #de5246 !important;
+    color: #fff;
+}
+
+.other-auth-or {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
