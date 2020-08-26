@@ -14,6 +14,7 @@ import {
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import OtherAuth from '../components/OtherAuth';
+import Firebase from '../auth';
 
 const classes = theme => ({
     paper: {
@@ -35,7 +36,25 @@ const classes = theme => ({
     },
 });
 
+const fire = new Firebase();
+
 class Login extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: '',
+            password: ''
+        }
+    }
+
+    doLoginWithEmailAndPassword(e) {
+        e.preventDefault();
+        if (this.state.email !== '' || this.state.password !== '') {
+            fire.doSignInWithEmailAndPassword(this.state.email, this.state.password);
+        }
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -60,6 +79,7 @@ class Login extends React.Component {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            onChange={e => this.setState({ email: e.target.value })}
                         />
                         <TextField
                             variant="outlined"
@@ -71,6 +91,7 @@ class Login extends React.Component {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={e => this.setState({ password: e.target.value })}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -82,6 +103,7 @@ class Login extends React.Component {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={e => this.doLoginWithEmailAndPassword(e)}
                         >
                             Log in
                         </Button>
