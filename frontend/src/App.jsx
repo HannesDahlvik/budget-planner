@@ -1,9 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 // Pages
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import SignUp from './pages/Signup';
+import Firebase from './auth';
 
 export default class App extends React.Component {
     render() {
@@ -11,12 +13,13 @@ export default class App extends React.Component {
             <Router>
                 <Switch>
                     {
-                        fakeAuth.isAuthenticated ?
+                        new Firebase().isAuthed ?
                             <Switch>
                                 <Route path="/dashboard" component={Dashboard} />
                             </Switch>
                             :
                             <Switch>
+                                <Route path="/signup" component={SignUp} />
                                 <Route path="/login" component={Login} />
                                 <Redirect to="/login"></Redirect>
                             </Switch>
