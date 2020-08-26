@@ -8,12 +8,12 @@ import {
     Checkbox,
     Link,
     Grid,
-    Box,
     Typography,
     Container
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import OtherAuth from '../components/OtherAuth';
 
 const classes = theme => ({
     paper: {
@@ -98,6 +98,8 @@ class Login extends React.Component {
                             </Grid>
                         </Grid>
                     </form>
+
+                    <OtherAuth />
                 </div>
             </Container>
         )
