@@ -34,27 +34,26 @@ const classes = (theme) => ({
 
 class SignUp extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            username: '',
+            email: '',
+            password: ''
+        }
+    }
+
     createAccount(e) {
-      e.preventDefault()
+        e.preventDefault()
         const fire = new Firebase();
 
-        const username = document
-            .getElementById('username')
-            .value;
-
-        const email = document
-            .getElementById('email')
-            .value;
-
-        const password = document
-            .getElementById('password')
-            .value;
-
-        if (username.value === '' || email.value === '' || password.value === '') {
+        if (this.state.username === '' || this.state.email === '' || this.state.password === '') {
             console.log('wrong')
         } else {
-            fire.doCreateUserWithEmailAndPassword(email, password);
+            fire.doCreateUserWithEmailAndPassword(this.state.email, this.state.password);
         }
+
     }
 
     render() {
@@ -80,7 +79,8 @@ class SignUp extends React.Component {
                                     id="username"
                                     label="Username"
                                     name="username"
-                                    autoComplete="username"/>
+                                    autoComplete="username"
+                                    onChange={e => this.setState({username: e.target.value})}/>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -90,7 +90,8 @@ class SignUp extends React.Component {
                                     id="email"
                                     label="Email Address"
                                     name="email"
-                                    autoComplete="email"/>
+                                    autoComplete="email"
+                                    onChange={e => this.setState({email: e.target.value})}/>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -101,7 +102,8 @@ class SignUp extends React.Component {
                                     label="Password"
                                     type="password"
                                     id="password"
-                                    autoComplete="current-password"/>
+                                    autoComplete="current-password"
+                                    onChange={e => this.setState({password: e.target.value})}/>
                             </Grid>
 
                         </Grid>
@@ -111,7 +113,7 @@ class SignUp extends React.Component {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick={this.createAccount}>
+                            onClick={e => this.createAccount(e)}>
                             Sign Up
                         </Button>
                         <Grid container justify="flex-end">
