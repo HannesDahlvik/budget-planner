@@ -28,7 +28,7 @@ export default class App extends React.Component {
 }
 
 const fakeAuth = {
-    isAuthenticated: false,
+    isAuthenticated: true,
     authenticate(cb) {
         fakeAuth.isAuthenticated = true;
         setTimeout(cb, 100);
