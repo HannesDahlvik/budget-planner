@@ -6,13 +6,14 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import SignUp from './pages/Signup';
 import Firebase from './auth';
+import Homepage from './pages/Homepage';
 
 export default class App extends React.Component {
     render() {
         return (
             <Router>
                 <Switch>
-                    {
+                    {/* {
                         new Firebase().isAuthed ?
                             <Switch>
                                 <Route path="/dashboard" component={Dashboard} />
@@ -23,21 +24,33 @@ export default class App extends React.Component {
                                 <Route path="/login" component={Login} />
                                 <Redirect to="/login"></Redirect>
                             </Switch>
-                    }
+                    } */}
+                    <Route exact path="/" component={Homepage} />
+                    <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/signup" component={SignUp} />
                 </Switch>
             </Router>
         );
     }
 }
 
-const fakeAuth = {
-    isAuthenticated: false,
-    authenticate(cb) {
-        fakeAuth.isAuthenticated = true;
-        setTimeout(cb, 100);
-    },
-    signout(cb) {
-        fakeAuth.isAuthenticated = false;
-        setTimeout(cb, 100);
-    }
-};
+function PrivateRoute({ children, ...rest }) {
+    return (
+        <Route
+            {...rest}
+            render={({ location }) =>
+                new Firebase().isAuthed() ? (
+                    children
+                ) : (
+                        <Redirect
+                            to={{
+                                pathname: "/login",
+                                state: { from: location }
+                            }}
+                        />
+                    )
+            }
+        />
+    );
+}

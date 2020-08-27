@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Divider, withStyles } from '@material-ui/core';
 import Firebase from '../auth';
+import ErrorHandler from '../ErrorHandler';
+import { withRouter } from 'react-router-dom';
 
 const classes = theme => ({
     otherAuthWrapper: {
@@ -30,8 +32,13 @@ const classes = theme => ({
 const fire = new Firebase();
 
 class OtherAuth extends React.Component {
-    doLoginWithGoogle() {
-        fire.doSignInWithGoogle().catch(err => console.error(err));
+    constructor(props) {
+        super(props);
+    }
+
+    async doLoginWithGoogle() {
+        await fire.doSignInWithGoogle().catch(err => new ErrorHandler(err.message));
+        this.props.history.push('/dashboard');
     }
 
     render() {
@@ -45,11 +52,11 @@ class OtherAuth extends React.Component {
                     <Divider className={classes.divider} />
                 </div>
                 <div className={classes.otherAuth}>
-                    <Button onClick={this.doLoginWithGoogle} className="other-auth-icon other-auth-icon-google" variant="contained" size="large"><i className="fab fa-google other-auth-icon other-auth-icon-google"></i><p className={classes.buttonText}>Log in with Google</p></Button>
+                    <Button onClick={() => this.doLoginWithGoogle()} className="other-auth-icon other-auth-icon-google" variant="contained" size="large"><i className="fab fa-google other-auth-icon other-auth-icon-google"></i><p className={classes.buttonText}>Log in with Google</p></Button>
                 </div>
             </div>
         );
     }
 }
 
-export default withStyles(classes)(OtherAuth);
+export default withRouter(withStyles(classes)(OtherAuth));
