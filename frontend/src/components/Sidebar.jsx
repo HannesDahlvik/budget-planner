@@ -50,16 +50,19 @@ const useStyles = makeStyles((theme) => ({
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)',
     },
     tab: {
-        position: 'relative',
+        '&:hover': {
+            'background-color': theme.palette.primary.main,
+            color: 'white'
+        },
     },
     'selected': {
-        'background-color': '#2196F3',
+        'background-color': theme.palette.primary.main,
         border: 'none',
         color: 'white',
     },
     none: {
         display: 'none'
-    }
+    },
 }));
 
 export default function Sidebar(props) {
@@ -84,7 +87,7 @@ export default function Sidebar(props) {
                     variant='fullWidth'
                 >
                     {props.contentArr.map(item =>
-                        <Tab classes={{ selected: classes.selected }} key={item.index} label={item.title} {...a11yProps(item.index)} />
+                        <Tab classes={{ selected: classes.selected }} key={item.index} label={item.title} className={classes.tab} {...a11yProps(item.index)} />
                     )}
                 </Tabs>
             </div>

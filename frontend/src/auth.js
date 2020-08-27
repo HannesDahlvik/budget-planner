@@ -24,6 +24,8 @@ class Firebase {
         this.auth = app.auth();
         this.authed = this.auth.currentUser;
 
+        this.firebase = firebaseApp
+
         this.googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
         this.history = createBrowserHistory();

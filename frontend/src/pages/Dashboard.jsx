@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Sidebar from '../components/Sidebar'
+import { UserContext } from '../UserContext';
 
 const styles = {
     root: {
@@ -25,16 +26,20 @@ const styles = {
 }
 
 export class Dashboard extends React.Component {
+    static contextType = UserContext
+
     constructor(props) {
         super(props);
     }
 
     render() {
+        const user = this.context
+        console.log(user);
         const { classes } = this.props;
         const contentArr = [{
             index: 0,
-            title: 'test1',
-            content: 'content of test1'
+            title: 'Front page',
+            content: 'content of frontpage'
         },
         {
             index: 1,
