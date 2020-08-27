@@ -13,18 +13,6 @@ export default class App extends React.Component {
         return (
             <Router>
                 <Switch>
-                    {/* {
-                        new Firebase().isAuthed ?
-                            <Switch>
-                                <Route path="/dashboard" component={Dashboard} />
-                            </Switch>
-                            :
-                            <Switch>
-                                <Route path="/signup" component={SignUp} />
-                                <Route path="/login" component={Login} />
-                                <Redirect to="/login"></Redirect>
-                            </Switch>
-                    } */}
                     <Route exact path="/" component={Homepage} />
                     <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
                     <Route exact path="/login" component={Login} />
