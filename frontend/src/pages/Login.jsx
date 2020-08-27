@@ -25,7 +25,7 @@ const classes = theme => ({
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: theme.palette.primary.main,
     },
     form: {
         width: '100%',
@@ -101,7 +101,7 @@ class Login extends React.Component {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             className={classes.submit}
                             onClick={e => this.doLoginWithEmailAndPassword(e)}
                         >
