@@ -101,7 +101,7 @@ class Login extends React.Component {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             className={classes.submit}
                             onClick={e => this.doLoginWithEmailAndPassword(e)}
                         >
