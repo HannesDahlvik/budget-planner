@@ -63,7 +63,6 @@ export default class App extends React.Component {
                         <Route exact path="/signup" component={SignUp} />
                     </Switch>
                 </UserContext.Provider>
-
             </Router>
         );
     }
