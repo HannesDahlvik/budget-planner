@@ -13,10 +13,10 @@ export default class App extends React.Component {
         return (
             <Router>
                 <Switch>
-                    <Route exact path="/" component={Homepage} />
                     <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/signup" component={SignUp} />
+                    <Route exact path="/" component={Homepage} />
                 </Switch>
             </Router>
         );

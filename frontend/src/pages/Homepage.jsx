@@ -1,24 +1,64 @@
 import React from 'react';
 import './Homepage.scss';
 import Navbar from '../components/Navbar';
-import { Typography } from '@material-ui/core';
+import { Typography, Button, TextField, withStyles } from '@material-ui/core';
 
-export default class Homepage extends React.Component {
+const classes = (theme) => ({
+    textField: {
+        'border-color': '#fff'
+    }
+});
+
+class Homepage extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+        const { classes } = this.props;
+
         return (
             <>
                 <Navbar />
                 <div className="section">
                     <div className="skewed"></div>
-                    <div className="big-ass-header">
-                        <Typography variant="h3">our mission is to big money</Typography>
+                    <div className="home-header">
+                        <Typography variant="h3">Our mission is to make you SAVE big money</Typography>
+                        <Typography variant="subtitle1">Made from poor student(s) from ukraine</Typography>
+                        <div className="home-header-buttons">
+                            <Button href="/dashboard" variant="contained">dashboard</Button>
+                            <Button variant="outlined" color="inherit">Donate</Button>
+                        </div>
                     </div>
                 </div>
 
-                <div className="section">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos pariatur minima repellendus eaque illum accusantium porro magni veritatis alias odit illo provident earum, tenetur, quibusdam id magnam sunt consequuntur beatae minus soluta, nesciunt enim fugit. Tenetur reprehenderit illum, accusamus accusantium aperiam temporibus et quasi, recusandae necessitatibus mollitia velit alias dolore.</p>
+                <div className="about-section page-section" id="about">
+                    <Typography variant="h4">About</Typography>
+                    <Typography variant="body1">Budget Planner is made for you to see how much money you could save. Basically you just enter a sum how much you make in a month and enter how much you approximately spend in a month.</Typography>
+                </div>
+
+                <div className="how-it-works-section" id="works">
+
+                </div>
+
+                <div className="contact-section" id="contact">
+                    <form className="contact-form">
+                        <Typography variant="h4">Contact us</Typography>
+                        <div className="contact-form-input-wrapper">
+                            <TextField className={classes.textField} label="Name" required variant="outlined" />
+                        </div>
+                        <div className="contact-form-input-wrapper">
+                            <TextField className={classes.textField} label="Email" required variant="outlined" />
+                        </div>
+                        <div className="contact-form-input-wrapper">
+                            <TextField multiline rowsMax={6} className={classes.textField} label="Message" required variant="outlined" />
+                        </div>
+                        <Button size="large" variant="contained">Submit</Button>
+                    </form>
                 </div>
             </>
         )
     }
 }
+
+export default withStyles(classes)(Homepage);
