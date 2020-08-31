@@ -7,10 +7,12 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import OtherAuth from '../components/OtherAuth';
 import Firebase from '../auth';
+import ErrorHandler from '../ErrorHandler';
+import { withRouter } from 'react-router-dom';
 
 const classes = (theme) => ({
     paper: {
@@ -21,7 +23,7 @@ const classes = (theme) => ({
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.primary.main
     },
     form: {
         width: '100%',
@@ -44,27 +46,27 @@ class SignUp extends React.Component {
         }
     }
 
-    createAccount(e) {
+    async createAccount(e) {
         e.preventDefault()
         const fire = new Firebase();
 
         if (this.state.username === '' || this.state.email === '' || this.state.password === '') {
-            console.log('wrong')
+            new ErrorHandler('Please fill in the fields.');
         } else {
-            fire.doCreateUserWithEmailAndPassword(this.state.email, this.state.password);
+            await fire.doCreateUserWithEmailAndPassword(this.state.username, this.state.email, this.state.password);
+            this.props.history.push('/dashboard');
         }
-
     }
 
     render() {
-        const {classes} = this.props
+        const { classes } = this.props
 
         return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline/>
+                <CssBaseline />
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon/>
+                        <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
@@ -80,7 +82,8 @@ class SignUp extends React.Component {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
-                                    onChange={e => this.setState({username: e.target.value})}/>
+                                    onChange={e => this.setState({ username: e.target.value })}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -91,7 +94,8 @@ class SignUp extends React.Component {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
-                                    onChange={e => this.setState({email: e.target.value})}/>
+                                    onChange={e => this.setState({ email: e.target.value })}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -103,9 +107,9 @@ class SignUp extends React.Component {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={e => this.setState({password: e.target.value})}/>
+                                    onChange={e => this.setState({ password: e.target.value })}
+                                />
                             </Grid>
-
                         </Grid>
                         <Button
                             type="submit"
@@ -125,11 +129,11 @@ class SignUp extends React.Component {
                         </Grid>
                     </form>
 
-                    <OtherAuth/>
+                    <OtherAuth />
                 </div>
             </Container>
         )
     }
 }
 
-export default withStyles(classes)(SignUp);
+export default withRouter(withStyles(classes)(SignUp));
