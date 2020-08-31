@@ -65,16 +65,15 @@
 
 .contact-section {
     height: 95vh;
-    background: #512da8;
 
     .contact-form {
         display: flex;
         align-items: center;
         flex-direction: column;
-        width: 50%;
+        width: 400px;
+        max-width: 100%;
         margin: 0 auto;
         padding: 100px 50px;
-        color: #fff;
 
         h4 {
             margin-bottom: 25px;
@@ -86,19 +85,20 @@
 
             .MuiTextField-root {
                 width: 100%;
-
-                .MuiOutlinedInput-notchedOutline {
-                    border-color: #fff;
-                }
-
-                input {
-                    color: #fff;
-                }
-
-                label {
-                    color: #fff;
-                }
             }
         }
+    }
+}
+
+@media(max-width: 1200px) {
+    .contact-form {
+        width: 60% !important;
+        padding: 50px 25px !important;
+    }
+}
+
+@media(max-width: 800px) {
+    .contact-form {
+        width: 100% !important;
     }
 }

@@ -53,7 +53,7 @@ class Homepage extends React.Component {
                         <div className="contact-form-input-wrapper">
                             <TextField multiline rowsMax={6} className={classes.textField} label="Message" required variant="outlined" />
                         </div>
-                        <Button size="large" variant="contained">Submit</Button>
+                        <Button size="large" variant="contained" color="secondary">Submit</Button>
                     </form>
                 </div>
             </>
