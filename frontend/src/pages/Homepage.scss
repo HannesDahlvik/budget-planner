@@ -1,0 +1,104 @@
+.homepage {
+    width: 100%;
+    height: 100%;
+    // background-color: #08194d;
+}
+
+.skewed {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 90%;
+    background: #512da8;
+    z-index: 1;
+    transform: skewY(5deg);
+    transform-origin: top right;
+}
+
+.section {
+    height: 100vh;
+}
+
+.home-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    color: #fff;
+    z-index: 1;
+    margin-top: 250px;
+    width: 100%;
+    text-align: center;
+
+    .home-header-buttons {
+        margin-top: 25px;
+
+        * {
+            margin: auto 10px;
+        }
+    }
+}
+
+.page-section {}
+
+.about-section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 400px;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+
+    h4 {
+        margin-bottom: 25px;
+    }
+}
+
+.how-it-works-section {
+    height: 100vh;
+}
+
+.contact-section {
+    height: 95vh;
+
+    .contact-form {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 400px;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 100px 50px;
+
+        h4 {
+            margin-bottom: 25px;
+        }
+
+        .contact-form-input-wrapper {
+            margin: 10px auto;
+            width: 100%;
+
+            .MuiTextField-root {
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media(max-width: 1200px) {
+    .contact-form {
+        width: 60% !important;
+        padding: 50px 25px !important;
+    }
+}
+
+@media(max-width: 800px) {
+    .contact-form {
+        width: 100% !important;
+    }
+}

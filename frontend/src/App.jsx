@@ -57,18 +57,13 @@ export default class App extends React.Component {
             <Router>
                 <UserContext.Provider value={user}>
                     <Switch>
-                        <Route exact path="/" component={Homepage} />
                         <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/signup" component={SignUp} />
+                        <Route exact path="/" component={Homepage} />
                     </Switch>
                 </UserContext.Provider>
-
             </Router>
         );
     }
 }
-
-
-
-//new Firebase().isAuthed()
