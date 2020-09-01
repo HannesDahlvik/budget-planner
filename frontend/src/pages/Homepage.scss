@@ -63,29 +63,108 @@
     height: 100vh;
 }
 
-.contact-section {
+.footer-section {
     height: 95vh;
 
-    .contact-form {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        width: 400px;
-        max-width: 100%;
-        margin: 0 auto;
-        padding: 100px 50px;
+    .contact-section {
+        -webkit-box-shadow: 0 1px 47px -6px rgba(0, 0, 0, 0.59);
+        -moz-box-shadow: 0 1px 47px -6px rgba(0, 0, 0, 0.59);
+        box-shadow: 0 1px 47px -6px rgba(0, 0, 0, 0.59);
 
-        h4 {
-            margin-bottom: 25px;
+        .contact-form {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 400px;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 100px 50px;
+
+            h4 {
+                margin-bottom: 25px;
+            }
+
+            .contact-form-input-wrapper {
+                margin: 10px auto;
+                width: 100%;
+
+                .MuiTextField-root {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .footer-first {
+        display: flex;
+
+        .footer-info {
+            margin: 5% 0 0 5%;
+            width: 100%;
+            max-width: 30%;
+
+            h4 {
+                height: 4rem;
+            }
+
+            .homo {
+                display: flex;
+                flex-direction: column;
+                margin: 3% 0 0;
+
+                .wrapper {
+                    display: flex;
+                    margin: 20px 0 0;
+                    font-size: 1.5rem;
+                }
+
+                .inf {
+                    margin: 0 3% 4px;
+                }
+            }
         }
 
-        .contact-form-input-wrapper {
-            margin: 10px auto;
-            width: 100%;
+        .footer-contact {
+            margin: 0 0 0 30%;
+        }
 
-            .MuiTextField-root {
-                width: 100%;
-            }
+    }
+}
+
+.original-footer {
+    height: 55vh;
+    color: #fff;
+    background-color: #512da8;
+    padding: 5%;
+
+    p {
+        margin: 5% 0;
+    }
+}
+
+.infos {
+    display: flex;
+    flex-direction: row;
+
+    .footer-about {
+        margin: 0 30%;
+    }
+}
+
+.sections {
+
+    display: flex;
+    justify-content: space-around;
+
+    .section {
+        transition: .3s;
+        margin: 5% 0 0;
+        height: 4vh;
+        color: rgb(138, 137, 137);
+        
+        :hover {
+            transition: .3s;
+            color: #fff;
         }
     }
 }

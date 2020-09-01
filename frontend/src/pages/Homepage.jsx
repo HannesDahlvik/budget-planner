@@ -1,7 +1,7 @@
 import React from 'react';
 import './Homepage.scss';
 import Navbar from '../components/Navbar';
-import { Typography, Button, TextField, withStyles } from '@material-ui/core';
+import { Typography, Button, TextField, withStyles, Icon } from '@material-ui/core';
 
 const classes = (theme) => ({
     textField: {
@@ -41,20 +41,57 @@ class Homepage extends React.Component {
 
                 </div>
 
-                <div className="contact-section" id="contact">
-                    <form className="contact-form">
-                        <Typography variant="h4">Contact us</Typography>
-                        <div className="contact-form-input-wrapper">
-                            <TextField className={classes.textField} label="Name" required variant="outlined" />
+                <div className="footer-section" id="footer">
+                    <div className="footer-first">
+                        <div className="footer-info">
+                            <Typography variant="h4">Get in touch</Typography>
+                            <Typography variant="body1">lol get rekt iot we take your moni from bank account and use on reddit gold because we want karma and hamburger.</Typography>
+                            <div className="homo">
+                                <aside className="wrapper"><Icon>email</Icon><p className="inf">@gmail.com</p></aside>
+                                <aside className="wrapper"><Icon>location_on</Icon><p className="inf">Jeppis, Finland</p></aside>
+                            </div>
                         </div>
-                        <div className="contact-form-input-wrapper">
-                            <TextField className={classes.textField} label="Email" required variant="outlined" />
+
+                        <div className="footer-contact">
+                            <div className="contact-section" id="contact">
+                                <form className="contact-form">
+                                    <Typography variant="h4">Contact us</Typography>
+                                    <div className="contact-form-input-wrapper">
+                                        <TextField className={classes.textField} label="Name" required variant="outlined" />
+                                    </div>
+                                    <div className="contact-form-input-wrapper">
+                                        <TextField className={classes.textField} label="Email" required variant="outlined" />
+                                    </div>
+                                    <div className="contact-form-input-wrapper">
+                                        <TextField multiline rowsMax={6} className={classes.textField} label="Message" required variant="outlined" />
+                                    </div>
+                                    <Button size="large" variant="contained" color="secondary">Submit</Button>
+                                </form>
+                            </div>
+
                         </div>
-                        <div className="contact-form-input-wrapper">
-                            <TextField multiline rowsMax={6} className={classes.textField} label="Message" required variant="outlined" />
+                    </div>
+                    <div className="original-footer">
+                        <div className="infos">
+                        <div className="footer-info">
+                            <Typography variant="h4">Budget PLANNER</Typography>
+                            <Typography variant="body1">LOREM IPSUM</Typography>
                         </div>
-                        <Button size="large" variant="contained" color="secondary">Submit</Button>
-                    </form>
+                        <div className="footer-about">
+                            <Typography variant="h4">About us</Typography>
+                            <Typography variant="body1">We are a budget planner website</Typography>
+                        </div>
+                        <div className="social-medias">
+                        
+                        </div>
+                        </div>
+                        <div className="sections">
+                            <Button className="section">HOME</Button>
+                            <Button className="section">ABOUT</Button>
+                            <Button className="section">HOW IT WORKS</Button>
+                            <Button className="section">CONTACT</Button>
+                        </div>
+                    </div>
                 </div>
             </>
         )
