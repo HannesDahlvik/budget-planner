@@ -65,8 +65,10 @@
 
 .footer-section {
     height: 95vh;
+    position: relative;
 
     .contact-section {
+        background-color: #fff;
         -webkit-box-shadow: 0 1px 47px -6px rgba(0, 0, 0, 0.59);
         -moz-box-shadow: 0 1px 47px -6px rgba(0, 0, 0, 0.59);
         box-shadow: 0 1px 47px -6px rgba(0, 0, 0, 0.59);
@@ -97,9 +99,14 @@
 
     .footer-first {
         display: flex;
-
+        justify-content: space-between;
+        padding: 0 10%;
+        position: absolute;
+        z-index: 1;
+        bottom: 50%;
+        width: 100%;
+        
         .footer-info {
-            margin: 5% 0 0 5%;
             width: 100%;
             max-width: 30%;
 
@@ -107,7 +114,7 @@
                 height: 4rem;
             }
 
-            .homo {
+            .info {
                 display: flex;
                 flex-direction: column;
                 margin: 3% 0 0;
@@ -123,19 +130,17 @@
                 }
             }
         }
-
-        .footer-contact {
-            margin: 0 0 0 30%;
-        }
-
     }
 }
 
 .original-footer {
+    position: absolute;
+    bottom: 0;
     height: 55vh;
+    width: 100%;
     color: #fff;
     background-color: #512da8;
-    padding: 5%;
+    padding: 5% 10%;
 
     p {
         margin: 5% 0;
@@ -157,25 +162,22 @@
     justify-content: space-around;
 
     .section {
-        transition: .3s;
+        transition: 0.3s;
         margin: 5% 0 0;
         height: 4vh;
         color: rgb(138, 137, 137);
-        
         :hover {
-            transition: .3s;
+            transition: 0.3s;
             color: #fff;
         }
     }
 }
-
 @media(max-width: 1200px) {
     .contact-form {
         width: 60% !important;
         padding: 50px 25px !important;
     }
 }
-
 @media(max-width: 800px) {
     .contact-form {
         width: 100% !important;

@@ -46,7 +46,7 @@ class Homepage extends React.Component {
                         <div className="footer-info">
                             <Typography variant="h4">Get in touch</Typography>
                             <Typography variant="body1">lol get rekt iot we take your moni from bank account and use on reddit gold because we want karma and hamburger.</Typography>
-                            <div className="homo">
+                            <div className="info">
                                 <aside className="wrapper"><Icon>email</Icon><p className="inf">@gmail.com</p></aside>
                                 <aside className="wrapper"><Icon>location_on</Icon><p className="inf">Jeppis, Finland</p></aside>
                             </div>
