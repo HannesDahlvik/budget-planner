@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Link, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -8,9 +8,18 @@ import { UserContext } from '../UserContext';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
+import Frontpage from './dasboard_pages/Frontpage';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Firebase from '../auth';
+
 const styles = (theme) => ({
     root: {
-        flexGrow: 1,
+        display: 'flex'
     },
     dashboard: {
         'font-family': 'Roboto',
@@ -23,9 +32,19 @@ const styles = (theme) => ({
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)',
     },
     namedisplay: {
+        display: 'flex',
+        'justify-content': 'center',
         'text-align': 'center',
         'padding-top': '3vh',
         'padding-bottom': '3vh',
+        'flex-direction': 'column',
+    },
+    namedropdown: {
+        display: 'flex',
+        'align-items': 'center',
+        margin: '0 auto',
+        cursor: 'pointer',
+        // height: '10px',
     },
     navtabs: {
         flexGrow: 1,
@@ -55,18 +74,32 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {
             tabIndex: 0,
+            anchorEl: null,
         }
+    }
+
+    handleDropdown = (e) => {
+        this.setState({ anchorEl: e.currentTarget })
+    }
+
+    handleClickAway = () => {
+        this.setState({ anchorEl: null })
     }
 
     handleTabChange = (event, value) => {
         this.setState({ tabIndex: value })
-        console.log(value);
+    }
+
+    logout = () => {
+        new Firebase().doSignOut().then((res) =>
+            this.props.history.push('/')
+        ).catch(err => console.log(err))
     }
 
     render() {
         let user = this.context
         user = user.user
-        const { tabIndex } = this.state
+        const { tabIndex, anchorEl } = this.state
         const { classes } = this.props;
 
         if (user) {
@@ -75,7 +108,24 @@ export class Dashboard extends React.Component {
                     <BrowserRouter>
                         <div className={classes.sidebar}>
                             <div className={classes.namedisplay}>
-                                {user.displayName}
+                                <div
+                                    className={classes.namedropdown}
+                                    onClick={(e) => this.handleDropdown(e)}
+                                >
+                                    <span>{user.displayName}</span>
+                                    <ArrowDropDownIcon />
+                                </div>
+                                <Popper open={Boolean(anchorEl)} anchororigin={{ vertical: 'bottom' }} anchorEl={anchorEl}>
+                                    <Paper>
+                                        <ClickAwayListener onClickAway={this.handleClickAway}>
+                                            <MenuList id="menu-list-grow">
+                                                <MenuItem onClick={this.logout}>Log out</MenuItem>
+                                            </MenuList>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Popper>
+
+
                             </div>
                             <Tabs value={tabIndex} onChange={this.handleTabChange} orientation="vertical" variant='fullWidth' className={classes.navtabs}
                                 classes={{ indicator: classes.none }}
@@ -86,7 +136,7 @@ export class Dashboard extends React.Component {
                         </div>
                         <div className={classes.content}>
                             <Switch>
-                                <Route path="/dashboard/frontpage" component={frontpage} />
+                                <Route path="/dashboard/frontpage" component={Frontpage} />
                                 <Route path="/dashboard/test" component={test} />
                             </Switch>
                         </div>
@@ -99,14 +149,6 @@ export class Dashboard extends React.Component {
     }
 }
 
-const frontpage = () => {
-    return (
-        <div>
-            frontpage content
-        </div>
-    )
-}
-
 const test = () => {
     return (
         <div>
@@ -116,4 +158,4 @@ const test = () => {
 }
 
 
-export default withStyles(styles)(Dashboard)
+export default withRouter(withStyles(styles)(Dashboard))
