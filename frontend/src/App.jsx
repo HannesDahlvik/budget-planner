@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch, useLocation } from 'react-router-dom';
 
 // Pages
 import Login from './pages/Login';
@@ -8,6 +8,8 @@ import SignUp from './pages/Signup';
 import Firebase from './auth';
 import Homepage from './pages/Homepage';
 import { UserContext } from './UserContext'
+import AdditionalInfo from './pages/AdditionalInfo';
+import { Typography, Button } from '@material-ui/core';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -22,7 +24,7 @@ export default class App extends React.Component {
     }
 
     authListener = () => {
-        const firebase = new Firebase().firebase
+        const firebase = new Firebase().firebase;
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({ user: user });
@@ -33,7 +35,10 @@ export default class App extends React.Component {
     }
 
     render() {
-        const user = this.state
+        const { user } = this.state;
+
+        console.log(user);
+
         const PrivateRoute = ({ children, ...rest }) => {
             return (
                 <Route
@@ -53,21 +58,53 @@ export default class App extends React.Component {
                 />
             );
         }
-        return (
-            <Router>
-                <UserContext.Provider value={user}>
-                    <Switch>
-                        <Route exact path="/" component={Homepage} />
-                        <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
-                        <Route exact path="/login" component={Login} />
-                        <Route exact path="/signup" component={SignUp} />
-                    </Switch>
-                </UserContext.Provider>
-            </Router>
-        );
+
+        if (user) {
+            return (
+                <Router>
+                    <UserContext.Provider value={user}>
+                        <Switch>
+                            <PrivateRoute path="/additional-info"><AdditionalInfo /></PrivateRoute>
+                            <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
+                            <Route exact path="/login" component={Login} />
+                            <Route exact path="/signup" component={SignUp} />
+                            <Route exact path="/" component={Homepage} />
+                            <Route exact path="*" component={NoMatch} />
+                        </Switch>
+                    </UserContext.Provider>
+                </Router>
+            )
+        } else {
+            return (
+                <Router>
+                    <UserContext.Provider value={user}>
+                        <Switch>
+                            <PrivateRoute path="/additional-info"><AdditionalInfo /></PrivateRoute>
+                            <Route exact path="/dashboard"><Redirect to="/login" /></Route>
+                            <Route exact path="/login" component={Login} />
+                            <Route exact path="/signup" component={SignUp} />
+                            <Route exact path="/" component={Homepage} />
+                            <Route exact path="*" component={NoMatch} />
+                        </Switch>
+                    </UserContext.Provider>
+                </Router>
+            );
+        }
     }
 }
 
+function NoMatch() {
+    let location = useLocation();
 
+    return (
+        <div className="no-match-wrapper">
+            <Typography variant="h1">404</Typography>
 
-//new Firebase().isAuthed()
+            <Typography variant="h3">
+                No match for <code>{location.pathname}</code>
+            </Typography>
+
+            <Button href="/" size="large" color="primary" variant="contained">home</Button>
+        </div>
+    )
+}

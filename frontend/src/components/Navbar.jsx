@@ -1,40 +1,120 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import { NavLink } from 'react-router-dom';
+import './Navbar.scss';
+import Firebase from '../auth';
+import ErrorHandler from '../ErrorHandler';
+import App from '../App';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+const classes = (theme) => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.primary.main
+    },
+    navlink: {
+        color: '#fff',
+        'text-decoration': 'none',
+        marginRight: 50
+    },
+    title: {
+        fontSize: 20
+    },
+    navbarLinks: {
+        flexGrow: 1,
+        justifyContent: 'space-evenly'
+    },
+    navbarLink: {
+        margin: 'auto 10px'
+    },
+    rightLink: {
+        margin: 'auto 10px'
+    }
+});
 
-export default function ButtonAppBar() {
-  const classes = useStyles();
+class Navbar extends React.Component {
+    constructor(props) {
+        super(props);
 
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+        this.state = {
+            user: null
+        };
+
+        window.addEventListener('scroll', () => {
+            const navbarWrapperElement = document.querySelector('.navbar-wrapper');
+
+            if (window.scrollY > 150) {
+                navbarWrapperElement.style.height = '64px';
+                navbarWrapperElement.classList.add('navbar-active');
+            } else {
+                navbarWrapperElement.style.height = '128px';
+                navbarWrapperElement.classList.remove('navbar-active');
+            }
+        });
+    }
+
+    componentDidMount() {
+        this.authListener();
+    }
+
+    doLogout() {
+        new Firebase().doSignOut().then(res => {
+            console.log(res);
+        }).catch(err => new ErrorHandler(err.message));
+    }
+
+    authListener = () => {
+        const firebase = new Firebase().firebase
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user: user });
+            } else {
+                this.setState({ user: null });
+            }
+        });
+    }
+
+    scrollTo(element) {
+        const el = document.getElementById(element);
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    render() {
+        const { user } = this.state;
+        const { classes } = this.props;
+
+        return (
+            <div className={`navbar-wrapper ${classes.root}`}>
+                <AppBar className="navbar navbar-transparent" position="static">
+                    <Toolbar>
+                        <NavLink to="/" className={classes.navlink}>
+                            <Typography variant="overline" className={classes.title}>Budget planner</Typography>
+                        </NavLink>
+                        <div className={classes.navbarLinks}>
+                            <Button onClick={() => this.scrollTo('about')} className={classes.navbarLink} color="inherit">About</Button>
+                            <Button onClick={() => this.scrollTo('works')} className={classes.navbarLink} color="inherit">How it works</Button>
+                            <Button onClick={() => this.scrollTo('contact')} className={classes.navbarLink} color="inherit">Contact us</Button>
+                        </div>
+                        {user ? (
+                            <>
+                                <Button className={classes.rightLink} href="/dashboard" variant="outlined" color="inherit">Dashboard</Button>
+                                <Button className={classes.rightLink} onClick={this.doLogout} variant="outlined" color="inherit">Logout</Button>
+                            </>
+                        ) : (
+                                <>
+                                    <Button className={classes.rightLink} href="/signup" variant="outlined" color="inherit">Sign up</Button>
+                                    <Button className={classes.rightLink} href="/login" variant="outlined" color="inherit">Login</Button>
+                                </>
+                            )
+                        }
+                    </Toolbar>
+                </AppBar>
+            </div>
+        );
+    }
 }
+
+export default withStyles(classes)(Navbar);

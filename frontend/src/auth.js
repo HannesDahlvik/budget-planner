@@ -1,8 +1,5 @@
 import app from 'firebase/app';
 import firebase from 'firebase';
-import {
-    createBrowserHistory
-} from 'history';
 import ErrorHandler from './ErrorHandler';
 
 const firebaseConfig = {
@@ -24,11 +21,9 @@ class Firebase {
         this.auth = app.auth();
         this.authed = this.auth.currentUser;
 
-        this.firebase = firebaseApp
+        this.firebase = firebaseApp;
 
         this.googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-
-        this.history = createBrowserHistory();
     }
 
     isAuthed() {

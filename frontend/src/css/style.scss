@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Roboto';
+    height: 100%;
+}
+
 .other-auth-icon {
     font-size: 36px;
     font-weight: 700;
@@ -21,4 +26,21 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+}
+
+.no-match-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+
+    a {
+        margin-top: 25px;
+    }
+}
+
+code {
+    background-color: #ccc;
+    padding: 5px 10px;
 }
