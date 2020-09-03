@@ -27,3 +27,20 @@ body {
     align-items: center;
     width: 100%;
 }
+
+.no-match-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+
+    a {
+        margin-top: 25px;
+    }
+}
+
+code {
+    background-color: #ccc;
+    padding: 5px 10px;
+}

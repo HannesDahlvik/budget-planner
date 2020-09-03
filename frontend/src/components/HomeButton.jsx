@@ -35,7 +35,7 @@ class HomeButton extends React.Component {
         }
 
         return (
-            <Icon onClick={() => this.props.history.push('/')} className={classes.root} > home</Icon>
+            <Icon onClick={() => this.props.history.push('/')} className={classes.root}>home</Icon>
         )
     }
 }
