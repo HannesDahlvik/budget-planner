@@ -98,7 +98,6 @@ export class Dashboard extends React.Component {
 
     render() {
         let user = this.context
-        user = user.user
         const { tabIndex, anchorEl } = this.state
         const { classes } = this.props;
 

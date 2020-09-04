@@ -10,12 +10,14 @@ import Homepage from './pages/Homepage';
 import { UserContext } from './UserContext'
 import AdditionalInfo from './pages/AdditionalInfo';
 import { Typography, Button } from '@material-ui/core';
+import Loader from './components/Loader'
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: null
+            user: null,
+            readyToRender: false,
         };
     }
 
@@ -31,14 +33,12 @@ export default class App extends React.Component {
             } else {
                 this.setState({ user: null });
             }
+            this.setState({ readyToRender: true })
         });
     }
 
     render() {
-        const { user } = this.state;
-
-        console.log(user);
-
+        const { user, readyToRender } = this.state;
         const PrivateRoute = ({ children, ...rest }) => {
             return (
                 <Route
@@ -58,38 +58,43 @@ export default class App extends React.Component {
                 />
             );
         }
-
-        if (user) {
-            return (
-                <Router>
-                    <UserContext.Provider value={user}>
-                        <Switch>
-                            <PrivateRoute path="/additional-info"><AdditionalInfo /></PrivateRoute>
-                            <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/signup" component={SignUp} />
-                            <Route exact path="/" component={Homepage} />
-                            <Route exact path="*" component={NoMatch} />
-                        </Switch>
-                    </UserContext.Provider>
-                </Router>
-            )
+        if (readyToRender) {
+            console.log(user);
+            if (user) {
+                return (
+                    <Router>
+                        <UserContext.Provider value={user}>
+                            <Switch>
+                                <PrivateRoute path="/additional-info"><AdditionalInfo /></PrivateRoute>
+                                <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
+                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/signup" component={SignUp} />
+                                <Route exact path="/" component={Homepage} />
+                                <Route exact path="*" component={NoMatch} />
+                            </Switch>
+                        </UserContext.Provider>
+                    </Router>
+                )
+            } else {
+                return (
+                    <Router>
+                        <UserContext.Provider value={user}>
+                            <Switch>
+                                <PrivateRoute path="/additional-info"><AdditionalInfo /></PrivateRoute>
+                                <Route exact path="/dashboard"><Redirect to="/login" /></Route>
+                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/signup" component={SignUp} />
+                                <Route exact path="/" component={Homepage} />
+                                <Route exact path="*" component={NoMatch} />
+                            </Switch>
+                        </UserContext.Provider>
+                    </Router>
+                );
+            }
         } else {
-            return (
-                <Router>
-                    <UserContext.Provider value={user}>
-                        <Switch>
-                            <PrivateRoute path="/additional-info"><AdditionalInfo /></PrivateRoute>
-                            <Route exact path="/dashboard"><Redirect to="/login" /></Route>
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/signup" component={SignUp} />
-                            <Route exact path="/" component={Homepage} />
-                            <Route exact path="*" component={NoMatch} />
-                        </Switch>
-                    </UserContext.Provider>
-                </Router>
-            );
+            return (<Loader />)
         }
+
     }
 }
 

@@ -38,7 +38,7 @@ class OtherAuth extends React.Component {
 
     async doLoginWithGoogle() {
         await fire.doSignInWithGoogle().catch(err => new ErrorHandler(err.message));
-        this.props.history.push('/additional-info');
+        this.props.history.push('/dashboard');
     }
 
     render() {
