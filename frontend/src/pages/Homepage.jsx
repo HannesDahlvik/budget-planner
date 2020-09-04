@@ -4,8 +4,9 @@ import Navbar from '../components/Navbar';
 import { Typography, Button, TextField, withStyles, Icon } from '@material-ui/core';
 
 const classes = (theme) => ({
-    textField: {
-        'border-color': '#fff'
+    submitButton: {
+        width: '100%',
+        marginTop: 10
     }
 });
 
@@ -57,15 +58,15 @@ class Homepage extends React.Component {
                                 <form className="contact-form">
                                     <Typography variant="h4">Contact us</Typography>
                                     <div className="contact-form-input-wrapper">
-                                        <TextField className={classes.textField} label="Name" required variant="outlined" />
+                                        <TextField label="Name" required variant="outlined" />
                                     </div>
                                     <div className="contact-form-input-wrapper">
-                                        <TextField className={classes.textField} label="Email" required variant="outlined" />
+                                        <TextField label="Email" required variant="outlined" />
                                     </div>
                                     <div className="contact-form-input-wrapper">
-                                        <TextField multiline rowsMax={6} className={classes.textField} label="Message" required variant="outlined" />
+                                        <TextField multiline rows={4} rowsMax={6} label="Message" required variant="outlined" />
                                     </div>
-                                    <Button size="large" variant="contained" color="secondary">Submit</Button>
+                                    <Button className={classes.submitButton} size="large" variant="contained" color="secondary">Submit</Button>
                                 </form>
                             </div>
 
@@ -73,17 +74,17 @@ class Homepage extends React.Component {
                     </div>
                     <div className="original-footer">
                         <div className="infos">
-                        <div className="footer-info">
-                            <Typography variant="h4">Budget PLANNER</Typography>
-                            <Typography variant="body1">LOREM IPSUM</Typography>
-                        </div>
-                        <div className="footer-about">
-                            <Typography variant="h4">About us</Typography>
-                            <Typography variant="body1">We are a budget planner website</Typography>
-                        </div>
-                        <div className="social-medias">
-                        
-                        </div>
+                            <div className="footer-info">
+                                <Typography variant="h4">Budget PLANNER</Typography>
+                                <Typography variant="body1">LOREM IPSUM</Typography>
+                            </div>
+                            <div className="footer-about">
+                                <Typography variant="h4">About us</Typography>
+                                <Typography variant="body1">We are a budget planner website</Typography>
+                            </div>
+                            <div className="social-medias">
+
+                            </div>
                         </div>
                         <div className="sections">
                             <Button className="section">HOME</Button>
