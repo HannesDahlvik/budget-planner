@@ -1,6 +1,6 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch, Link, withRouter} from 'react-router-dom';
-import {withStyles} from '@material-ui/core/styles'
+import { BrowserRouter, Route, Switch, Link, withRouter, NavLink } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -17,6 +17,7 @@ import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Firebase from '../auth';
+import Profile from './dasboard_pages/Profile';
 
 const styles = (theme) => ({
     root: {
@@ -28,7 +29,7 @@ const styles = (theme) => ({
         'flex-direction': 'row'
     },
     sidebar: {
-        width: '23vw',
+        width: '25vw',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
@@ -53,18 +54,29 @@ const styles = (theme) => ({
         height: 224
     },
     tab: {
+        transition: '.25s',
+        borderColor: 'rgb(33, 150, 243)',
+
         '&:hover': {
-            'background-color': theme.palette.primary.main,
-            color: 'white'
-        }
+            'background-color': 'rgba(33, 150, 243, .15)',
+            color: '#000'
+        },
     },
     'selected': {
-        'background-color': theme.palette.primary.main,
+        'background-color': 'rgba(33, 150, 243, .15)',
+        'border-right': '6px solid rgb(33, 150, 243)',
         border: 'none',
-        color: 'white'
+        color: 'rgb(33, 150, 243)',
     },
     none: {
         display: 'none'
+    },
+    menuLink: {
+        textDecoration: 'none',
+        color: '#000'
+    },
+    content: {
+        width: '100%'
     }
 })
 
@@ -122,6 +134,8 @@ export class Dashboard extends React.Component {
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClickAway}>
                                             <MenuList id="menu-list-grow">
+                                                <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
+                                                <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
                                                 <MenuItem onClick={this.logout}>Log out</MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
@@ -160,6 +174,8 @@ export class Dashboard extends React.Component {
                             <Switch>
                                 <Route path="/dashboard/frontpage" component={Frontpage}/>
                                 <Route path="/dashboard/calendar" component={Calendar}/>
+                                <Route path="/dashboard/frontpage" component={Frontpage} />
+                                <Route path="/dashboard/profile" component={Profile} />
                             </Switch>
                         </div>
                     </BrowserRouter>
