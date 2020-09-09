@@ -19,10 +19,8 @@ const theme = createMuiTheme({
 });
 
 render((
-    <React.StrictMode>
         <ThemeProvider theme={theme}>
             <App />
             <ToastContainer closeOnClick />
         </ThemeProvider>
-    </React.StrictMode>
 ), document.getElementById('root'));
