@@ -74,12 +74,18 @@ const styles = (theme) => ({
     none: {
         display: 'none'
     },
-    menuLink: {
-        textDecoration: 'none',
-        color: '#000'
-    },
     content: {
         width: '100%'
+    },
+    menuItem: {
+        display: 'flex',
+        'justify-content': 'space-between',
+        textDecoration: 'none',
+        color: '#000',
+        width: '100%',
+    },
+    nameDropdownList: {
+        width: '200px',
     }
 })
 
@@ -136,10 +142,10 @@ export class Dashboard extends React.Component {
                                     anchorEl={anchorEl}>
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClickAway}>
-                                            <MenuList id="menu-list-grow">
-                                                <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
-                                                <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
-                                                <MenuItem onClick={this.logout}>Log out</MenuItem>
+                                            <MenuList id="menu-list-grow" className={classes.nameDropdownList}>
+                                                <MenuItem><NavLink className={classes.menuItem} to="/">Home <HomeIcon /></NavLink></MenuItem>
+                                                <MenuItem><Link className={classes.menuItem} to="/dashboard/profile">Profile <SettingsIcon /></Link></MenuItem>
+                                                <MenuItem onClick={this.logout} className={classes.menuItem}>Log out <ExitToAppIcon /></MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
                                     </Paper>
