@@ -9,7 +9,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
 import Frontpage from './dasboard_pages/Frontpage';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -17,17 +16,21 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Firebase from '../auth';
 
+// Icons
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SettingsIcon from '@material-ui/icons/Settings';
+import HomeIcon from '@material-ui/icons/Home';
+
 const styles = (theme) => ({
     root: {
         display: 'flex'
     },
     dashboard: {
         'font-family': 'Roboto',
-        display: 'flex',
-        'flex-direction': 'row',
     },
     sidebar: {
-        width: '23vw',
+        // width: '25vw',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)',
     },
@@ -65,6 +68,13 @@ const styles = (theme) => ({
     none: {
         display: 'none'
     },
+    menuItem: {
+        display: 'flex',
+        'justify-content': 'space-between',
+    },
+    nameDropdownList: {
+        width: '200px',
+    }
 })
 
 export class Dashboard extends React.Component {
@@ -103,9 +113,9 @@ export class Dashboard extends React.Component {
 
         if (user) {
             return (
-                <div className={classes.dashboard}>
+                <Grid container className={classes.dashboard} direction="row">
                     <BrowserRouter>
-                        <div className={classes.sidebar}>
+                        <Grid item xs={3} className={classes.sidebar}>
                             <div className={classes.namedisplay}>
                                 <div
                                     className={classes.namedropdown}
@@ -117,8 +127,10 @@ export class Dashboard extends React.Component {
                                 <Popper open={Boolean(anchorEl)} anchororigin={{ vertical: 'bottom' }} anchorEl={anchorEl}>
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClickAway}>
-                                            <MenuList id="menu-list-grow">
-                                                <MenuItem onClick={this.logout}>Log out</MenuItem>
+                                            <MenuList id="menu-list-grow" className={classes.nameDropdownList}>
+                                                <MenuItem className={classes.menuItem} onClick={this.logout}>Go to home <HomeIcon /></MenuItem>
+                                                <MenuItem className={classes.menuItem} onClick={this.logout}>Profile settings <SettingsIcon /></MenuItem>
+                                                <MenuItem className={classes.menuItem} onClick={this.logout}>Log out<ExitToAppIcon /></MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
                                     </Paper>
@@ -132,15 +144,15 @@ export class Dashboard extends React.Component {
                                 <Tab className={classes.tab} classes={{ selected: classes.selected }} label="Frontpage" component={Link} to="/dashboard/frontpage" />
                                 <Tab label="test" className={classes.tab} classes={{ selected: classes.selected }} component={Link} to="/dashboard/test" />
                             </Tabs>
-                        </div>
-                        <div className={classes.content}>
+                        </Grid>
+                        <Grid item xs={9} className={classes.content}>
                             <Switch>
                                 <Route path="/dashboard/frontpage" component={Frontpage} />
                                 <Route path="/dashboard/test" component={test} />
                             </Switch>
-                        </div>
+                        </Grid>
                     </BrowserRouter>
-                </div>
+                </Grid>
             )
         } else {
             return (<Loader />)
