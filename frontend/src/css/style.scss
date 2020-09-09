@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     height: 100%;
 }
 
@@ -43,4 +43,12 @@ body {
 code {
     background-color: #ccc;
     padding: 5px 10px;
+}
+
+@media(max-width: 1200px) {
+    .profile-page {
+        grid-template-rows: 1fr 1.5fr !important;
+        grid-template-columns: 1fr !important;
+        padding: 25px 50px !important;
+    }
 }

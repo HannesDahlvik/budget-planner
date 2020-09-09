@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, withRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Link, withRouter, NavLink } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,12 +9,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
 import Frontpage from './dasboard_pages/Frontpage';
+import Calendar from './dasboard_pages/Calendar';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Firebase from '../auth';
+import Profile from './dasboard_pages/Profile';
 
 // Icons
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -32,7 +34,7 @@ const styles = (theme) => ({
     sidebar: {
         // width: '25vw',
         height: '100vh',
-        'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)',
+        'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
     namedisplay: {
         display: 'flex',
@@ -40,7 +42,7 @@ const styles = (theme) => ({
         'text-align': 'center',
         'padding-top': '3vh',
         'padding-bottom': '3vh',
-        'flex-direction': 'column',
+        'flex-direction': 'column'
     },
     namedropdown: {
         display: 'flex',
@@ -52,28 +54,32 @@ const styles = (theme) => ({
     navtabs: {
         flexGrow: 1,
         display: 'flex',
-        height: 224,
+        height: 224
     },
     tab: {
+        transition: '.25s',
+        borderColor: 'rgb(33, 150, 243)',
+
         '&:hover': {
-            'background-color': theme.palette.primary.main,
-            color: 'white'
+            'background-color': 'rgba(33, 150, 243, .15)',
+            color: '#000'
         },
     },
     'selected': {
-        'background-color': theme.palette.primary.main,
+        'background-color': 'rgba(33, 150, 243, .15)',
+        'border-right': '6px solid rgb(33, 150, 243)',
         border: 'none',
-        color: 'white',
+        color: 'rgb(33, 150, 243)',
     },
     none: {
         display: 'none'
     },
-    menuItem: {
-        display: 'flex',
-        'justify-content': 'space-between',
+    menuLink: {
+        textDecoration: 'none',
+        color: '#000'
     },
-    nameDropdownList: {
-        width: '200px',
+    content: {
+        width: '100%'
     }
 })
 
@@ -84,7 +90,7 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {
             tabIndex: 0,
-            anchorEl: null,
+            anchorEl: null
         }
     }
 
@@ -101,9 +107,10 @@ export class Dashboard extends React.Component {
     }
 
     logout = () => {
-        new Firebase().doSignOut().then((res) =>
-            this.props.history.push('/')
-        ).catch(err => console.log(err))
+        new Firebase()
+            .doSignOut()
+            .then((res) => this.props.history.push('/'))
+            .catch(err => console.log(err))
     }
 
     render() {
@@ -117,38 +124,61 @@ export class Dashboard extends React.Component {
                     <BrowserRouter>
                         <Grid item xs={3} className={classes.sidebar}>
                             <div className={classes.namedisplay}>
-                                <div
-                                    className={classes.namedropdown}
-                                    onClick={(e) => this.handleDropdown(e)}
-                                >
+                                <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
                                     <span>{user.displayName}</span>
                                     <ArrowDropDownIcon />
                                 </div>
-                                <Popper open={Boolean(anchorEl)} anchororigin={{ vertical: 'bottom' }} anchorEl={anchorEl}>
+                                <Popper
+                                    open={Boolean(anchorEl)}
+                                    anchororigin={{
+                                        vertical: 'bottom'
+                                    }}
+                                    anchorEl={anchorEl}>
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClickAway}>
-                                            <MenuList id="menu-list-grow" className={classes.nameDropdownList}>
-                                                <MenuItem className={classes.menuItem} onClick={this.logout}>Go to home <HomeIcon /></MenuItem>
-                                                <MenuItem className={classes.menuItem} onClick={this.logout}>Profile settings <SettingsIcon /></MenuItem>
-                                                <MenuItem className={classes.menuItem} onClick={this.logout}>Log out<ExitToAppIcon /></MenuItem>
+                                            <MenuList id="menu-list-grow">
+                                                <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
+                                                <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
+                                                <MenuItem onClick={this.logout}>Log out</MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
                                     </Paper>
                                 </Popper>
 
-
                             </div>
-                            <Tabs value={tabIndex} onChange={this.handleTabChange} orientation="vertical" variant='fullWidth' className={classes.navtabs}
-                                classes={{ indicator: classes.none }}
-                            >
-                                <Tab className={classes.tab} classes={{ selected: classes.selected }} label="Frontpage" component={Link} to="/dashboard/frontpage" />
-                                <Tab label="test" className={classes.tab} classes={{ selected: classes.selected }} component={Link} to="/dashboard/test" />
+                            <Tabs
+                                value={tabIndex}
+                                onChange={this.handleTabChange}
+                                orientation="vertical"
+                                variant='fullWidth'
+                                className={classes.navtabs}
+                                classes={{
+                                    indicator: classes.none
+                                }}>
+                                <Tab
+                                    className={classes.tab}
+                                    classes={{
+                                        selected: classes.selected
+                                    }}
+                                    label="Frontpage"
+                                    component={Link}
+                                    to="/dashboard/frontpage" />
+                                <Tab
+                                    label="calendar"
+                                    className={classes.tab}
+                                    classes={{
+                                        selected: classes.selected
+                                    }}
+                                    component={Link}
+                                    to="/dashboard/calendar" />
                             </Tabs>
                         </Grid>
                         <Grid item xs={9} className={classes.content}>
                             <Switch>
                                 <Route path="/dashboard/frontpage" component={Frontpage} />
-                                <Route path="/dashboard/test" component={test} />
+                                <Route path="/dashboard/calendar" component={Calendar} />
+                                <Route path="/dashboard/frontpage" component={Frontpage} />
+                                <Route path="/dashboard/profile" component={Profile} />
                             </Switch>
                         </Grid>
                     </BrowserRouter>
@@ -159,14 +189,5 @@ export class Dashboard extends React.Component {
         }
     }
 }
-
-const test = () => {
-    return (
-        <div>
-            test content
-        </div>
-    )
-}
-
 
 export default withRouter(withStyles(styles)(Dashboard))
