@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles, Icon, Typography, TextField, Button } from '@material-ui/core';
 import Firebase from '../../auth';
+import { Pie } from 'react-chartjs-2';
 
 const classes = (theme) => ({
     root: {
@@ -42,7 +43,7 @@ const classes = (theme) => ({
         'grid-row-gap': '20px'
     },
     accountCircle: {
-        fontSize: '10em',
+        fontSize: '12.5em',
         marginBottom: '10px',
         color: '#333'
     },
@@ -68,6 +69,15 @@ const classes = (theme) => ({
             backgroundColor: '#dd0000',
             color: '#fff'
         }
+    },
+    pieChart: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column'
+    },
+    pieChartText: {
+        marginBottom: '25px'
     }
 });
 
@@ -96,6 +106,35 @@ class Profile extends React.Component {
     render() {
         const { username } = this.state;
         const { classes } = this.props;
+        const data = {
+            labels: ["hello", "yes", "no", "dsajkld", "dkl", "jdalk"],
+            datasets: [{
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 0.5
+            }]
+        }
+
+        const options = {
+            legend: {
+                position: 'right'
+            }
+        }
 
         return (
             <div className={`${classes.root} profile-page`}>
@@ -123,10 +162,11 @@ class Profile extends React.Component {
                 </div>
                 <div className={`${classes.infoPanel} ${classes.rightPanel} profile-right-info-panel`}>
                     <div className={`${classes.box} ${classes.side}`}>
-
+                        <Typography className={classes.pieChartText} variant="h5">Summary</Typography>
                     </div>
-                    <div className={`${classes.box} ${classes.side}`}>
-
+                    <div className={`${classes.box} ${classes.side} ${classes.pieChart}`}>
+                        <Typography className={classes.pieChartText} variant="h5">Text</Typography>
+                        <Pie className={classes.chart} data={data} options={options} />
                     </div>
                 </div>
             </div>
