@@ -1,6 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, withRouter, NavLink } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles'
+import {
+    BrowserRouter,
+    Route,
+    Switch,
+    Link,
+    withRouter,
+    NavLink,
+    Redirect
+} from 'react-router-dom';
+import {withStyles} from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -60,13 +68,13 @@ const styles = (theme) => ({
         '&:hover': {
             'background-color': 'rgba(33, 150, 243, .15)',
             color: '#000'
-        },
+        }
     },
     'selected': {
         'background-color': 'rgba(33, 150, 243, .15)',
         'border-right': '6px solid rgb(33, 150, 243)',
         border: 'none',
-        color: 'rgb(33, 150, 243)',
+        color: 'rgb(33, 150, 243)'
     },
     none: {
         display: 'none'
@@ -119,6 +127,7 @@ export class Dashboard extends React.Component {
             return (
                 <div className={classes.dashboard}>
                     <BrowserRouter>
+                        <Redirect from={'/dashboard'} to={'/dashboard/frontpage'}/>
                         <div className={classes.sidebar}>
                             <div className={classes.namedisplay}>
                                 <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
@@ -134,8 +143,12 @@ export class Dashboard extends React.Component {
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClickAway}>
                                             <MenuList id="menu-list-grow">
-                                                <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
-                                                <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
+                                                <MenuItem>
+                                                    <NavLink className={classes.menuLink} to="/">Home</NavLink>
+                                                </MenuItem>
+                                                <MenuItem>
+                                                    <Link className={classes.menuLink} to="/dashboard/profile">Profile</Link>
+                                                </MenuItem>
                                                 <MenuItem onClick={this.logout}>Log out</MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
@@ -161,11 +174,11 @@ export class Dashboard extends React.Component {
                                     component={Link}
                                     to="/dashboard/frontpage"/>
                                 <Tab
-                                    label="calendar"
                                     className={classes.tab}
                                     classes={{
                                     selected: classes.selected
                                 }}
+                                    label="calendar"
                                     component={Link}
                                     to="/dashboard/calendar"/>
                             </Tabs>
@@ -174,8 +187,8 @@ export class Dashboard extends React.Component {
                             <Switch>
                                 <Route path="/dashboard/frontpage" component={Frontpage}/>
                                 <Route path="/dashboard/calendar" component={Calendar}/>
-                                <Route path="/dashboard/frontpage" component={Frontpage} />
-                                <Route path="/dashboard/profile" component={Profile} />
+                                <Route path="/dashboard/frontpage" component={Frontpage}/>
+                                <Route path="/dashboard/profile" component={Profile}/>
                             </Switch>
                         </div>
                     </BrowserRouter>
