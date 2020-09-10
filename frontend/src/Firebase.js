@@ -19,6 +19,7 @@ app.analytics(firebaseApp);
 class Firebase {
     constructor() {
         this.auth = app.auth();
+        this.storage = app.storage();
         this.authed = this.auth.currentUser;
 
         this.firebase = firebaseApp;
@@ -45,12 +46,25 @@ class Firebase {
     }
 
     doSignInWithGoogle = async () => {
-        await this.auth.signInWithPopup(this.googleAuthProvider).catch(err => new ErrorHandler(err.message));
-
-        localStorage.setItem('user', JSON.stringify(this.auth.currentUser));
+        await this.auth.signInWithPopup(this.googleAuthProvider).then(() => {
+            localStorage.setItem('user', JSON.stringify(this.auth.currentUser));
+        }).catch(err => new ErrorHandler(err.message));
     }
 
     doSignOut = () => this.auth.signOut();
+
+    doUploadProfilePicture = async (file, photoURL) => {
+        photoURL = photoURL.replace('blob:', '');
+
+        let returnData;
+        const ref = this.storage.ref('avatars/' + file.name);
+        await ref.put(file).then(res => {
+            returnData = res.metadata.fullPath;
+        }).catch(err => new ErrorHandler(err.message));
+        const imageURL = await this.storage.ref(returnData).getDownloadURL();
+
+        return imageURL;
+    }
 }
 
 export default Firebase;
