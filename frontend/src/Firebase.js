@@ -53,17 +53,29 @@ class Firebase {
 
     doSignOut = () => this.auth.signOut();
 
-    doUploadProfilePicture = async (file, photoURL) => {
-        photoURL = photoURL.replace('blob:', '');
+    doUploadProfilePicture = async (file) => {
+        const metadata = {
+            customMetadata: {
+                'uid': this.auth.currentUser.uid,
+                'name': `avatars/${file.name}`
+            }
+        }
 
         let returnData;
         const ref = this.storage.ref('avatars/' + file.name);
-        await ref.put(file).then(res => {
+        await ref.put(file, metadata).then(res => {
             returnData = res.metadata.fullPath;
         }).catch(err => new ErrorHandler(err.message));
         const imageURL = await this.storage.ref(returnData).getDownloadURL();
 
         return imageURL;
+    }
+
+    doRemoveLastUsedProfilePicutre() {
+        const imageToDelete = this.storage.refFromURL(this.auth.currentUser.photoURL);
+        if (imageToDelete) {
+            imageToDelete.delete();
+        }
     }
 }
 

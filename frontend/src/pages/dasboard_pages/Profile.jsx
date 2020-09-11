@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, Icon, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { withStyles, Icon, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import Firebase from '../../Firebase';
 import { Pie } from 'react-chartjs-2';
 import ReactCrop from 'react-image-crop';
@@ -110,6 +110,44 @@ const classes = (theme) => ({
     },
     avatarEditButtonIcon: {
         fontSize: '4em'
+    },
+    croppedImagePreview: {
+        borderRadius: '50%'
+    },
+    none: {
+        display: 'none'
+    },
+    selectAvatarLabel: {
+        display: 'inline-flex',
+        cursor: 'pointer',
+        padding: '6px 16px',
+        'font-size': '0.875rem',
+        'min-width': '64px',
+        'box-sizing': 'border-box',
+        backgroundColor: '#2196f3',
+        color: '#fff',
+        transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        'font-family': '"Roboto", "Helvetica", "Arial", sans-serif',
+        'font-weight': 500,
+        'line-height': 1.75,
+        'border-radius': '4px',
+        'letter-spacing': '0.02857em',
+        'text-transform': 'uppercase',
+        margin: '0 auto',
+        marginBottom: '10px'
+    },
+    avatarDialogContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column'
+    },
+    redBg: {
+        backgroundColor: theme.palette.error.main,
+
+        '&:hover': {
+            backgroundColor: theme.palette.error.dark
+        }
     }
 });
 
@@ -127,6 +165,8 @@ class Profile extends React.Component {
             unit: '%',
             width: 30,
             aspect: 1 / 1,
+            minWidth: 10,
+            minHeight: 10
         },
     }
 
@@ -219,7 +259,6 @@ class Profile extends React.Component {
             canvas.toBlob(blob => {
                 if (!blob) {
                     new ErrorHandler('Canvas is empty');
-                    console.error('Canvas is empty');
                     return;
                 }
 
@@ -234,18 +273,20 @@ class Profile extends React.Component {
     }
 
     saveAvatarChanges = async () => {
-        await fire.doUploadProfilePicture(this.state.file, this.state.croppedImageUrl).then(imageURL => {
+        await fire.doRemoveLastUsedProfilePicutre();
+
+        await fire.doUploadProfilePicture(this.state.file).then(imageURL => {
             fire.auth.currentUser.updateProfile({
                 photoURL: imageURL
             }).then(() => {
+                this.setState({ file: null, src: null, width: 30 });
                 this.handleClose();
             }).catch(err => new ErrorHandler(err.message));
         }).catch(err => new ErrorHandler(err.message));
-
     }
 
     render() {
-        const { username, crop, croppedImageUrl, src } = this.state;
+        const { username, crop, src } = this.state;
         const { classes } = this.props;
         const data = {
             labels: ["hello", "yes", "no", "dsajkld", "dkl", "jdalk"],
@@ -287,32 +328,26 @@ class Profile extends React.Component {
                         aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title">{"Change profile picture"}</DialogTitle>
-                        <DialogContent>
-                            <input onChange={this.onSelectFile} type="file" accept="image/*"></input>
+                        <DialogContent className={classes.avatarDialogContent}>
+                            <label className={classes.selectAvatarLabel} htmlFor="select-avatar-input">Select image</label>
+                            <input onChange={this.onSelectFile} className={classes.none} id="select-avatar-input" type="file" accept="image/*"></input>
                             {src && (
                                 <ReactCrop
                                     src={src}
                                     crop={crop}
-                                    ruleOfThirds
+                                    circularCrop={true}
                                     onImageLoaded={this.onImageLoaded}
                                     onComplete={this.onCropComplete}
                                     onChange={this.onCropChange}
                                 />
                             )}
-                            {croppedImageUrl && (
-                                <>
-                                    <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />
-                                </>
-                            )}
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.handleClose} color="primary" variant="contained">Cancel</Button>
+                            <Button onClick={this.handleClose} className={classes.redBg} color="primary" variant="contained">Cancel</Button>
                             <Button onClick={this.saveAvatarChanges} color="primary" variant="contained">Save</Button>
                         </DialogActions>
                     </Dialog>
-                ) : (
-                        <></>
-                    )}
+                ) : (<></>)}
 
                 <div className={`${classes.root} profile-page`}>
                     <div className={classes.infoPanel}>
