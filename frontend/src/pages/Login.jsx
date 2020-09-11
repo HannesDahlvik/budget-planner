@@ -14,7 +14,7 @@ import {
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import OtherAuth from '../components/OtherAuth';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import HomeButton from '../components/HomeButton';
 
 const classes = theme => ({

@@ -19,8 +19,8 @@ const theme = createMuiTheme({
 });
 
 render((
-        <ThemeProvider theme={theme}>
-            <App />
-            <ToastContainer closeOnClick />
-        </ThemeProvider>
+    <ThemeProvider theme={theme}>
+        <App />
+        <ToastContainer closeOnClick />
+    </ThemeProvider>
 ), document.getElementById('root'));

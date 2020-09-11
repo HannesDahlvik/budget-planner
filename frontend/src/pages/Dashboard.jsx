@@ -12,7 +12,7 @@ import {withStyles} from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import {UserContext} from '../UserContext';
+import { UserContext } from '../UserContext';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
@@ -24,7 +24,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import Profile from './dasboard_pages/Profile';
 
 let url = window.location.href
@@ -102,15 +102,15 @@ export class Dashboard extends React.Component {
     }
 
     handleDropdown = (e) => {
-        this.setState({anchorEl: e.currentTarget})
+        this.setState({ anchorEl: e.currentTarget })
     }
 
     handleClickAway = () => {
-        this.setState({anchorEl: null})
+        this.setState({ anchorEl: null })
     }
 
     handleTabChange = (event, value) => {
-        this.setState({tabIndex: value})
+        this.setState({ tabIndex: value })
     }
 
     logout = () => {
@@ -122,8 +122,8 @@ export class Dashboard extends React.Component {
 
     render() {
         let user = this.context
-        const {tabIndex, anchorEl} = this.state
-        const {classes} = this.props;
+        const { tabIndex, anchorEl } = this.state
+        const { classes } = this.props;
 
         if (user) {
 
@@ -136,14 +136,14 @@ export class Dashboard extends React.Component {
                             <div className={classes.namedisplay}>
                                 <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
                                     <span>{user.displayName}</span>
-                                    <ArrowDropDownIcon/>
+                                    <ArrowDropDownIcon />
                                 </div>
 
                                 <Popper
                                     open={Boolean(anchorEl)}
                                     anchororigin={{
-                                    vertical: 'bottom'
-                                }}
+                                        vertical: 'bottom'
+                                    }}
                                     anchorEl={anchorEl}>
 
                                     <Paper>
@@ -169,16 +169,16 @@ export class Dashboard extends React.Component {
                                 variant='fullWidth'
                                 className={classes.navtabs}
                                 classes={{
-                                indicator: classes.none
-                            }}>
+                                    indicator: classes.none
+                                }}>
                                 <Tab
                                     className={classes.tab}
                                     classes={{
-                                    selected: classes.selected
-                                }}
+                                        selected: classes.selected
+                                    }}
                                     label="Frontpage"
                                     component={Link}
-                                    to="/dashboard/frontpage"/>
+                                    to="/dashboard/frontpage" />
                                 <Tab
                                     className={classes.tab}
                                     classes={{
@@ -186,14 +186,13 @@ export class Dashboard extends React.Component {
                                 }}
                                     label="calendar"
                                     component={Link}
-                                    to="/dashboard/calendar"/>
+                                    to="/dashboard/calendar" />
                             </Tabs>
                         </div>
                         <div className={classes.content}>
                             <Switch>
                                 <Route path="/dashboard/frontpage" component={Frontpage}/>
                                 <Route path="/dashboard/calendar" component={Calendar}/>
-                                <Route path="/dashboard/frontpage" component={Frontpage}/>
                                 <Route path="/dashboard/profile" component={Profile}/>
                             </Switch>
                         </div>
@@ -201,7 +200,7 @@ export class Dashboard extends React.Component {
                 </div>
             )
         } else {
-            return (<Loader/>)
+            return (<Loader />)
         }
     }
 }

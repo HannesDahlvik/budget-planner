@@ -1,12 +1,11 @@
 import React from 'react'
-import {Calendar, momentLocalizer, Views} from 'react-big-calendar'
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import events from '../../utils/events'
 import * as dates from '../../utils/dates'
 import './Calendar.scss'
 import moment from 'moment'
-import 'react-big-calendar/lib/css/react-big-calendar.css'
-import Firebase from '../../auth'
-import { TextareaAutosize } from '@material-ui/core'
+// import 'react-big-calendar/lib/css/react-big-calendar.css';
+// import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 
 const now = new Date()
 

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { NavLink } from 'react-router-dom';
 import './Navbar.scss';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import ErrorHandler from '../ErrorHandler';
 import App from '../App';
 
