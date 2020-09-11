@@ -6,6 +6,7 @@ import './Calendar.scss'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import Firebase from '../../auth'
+import { TextareaAutosize } from '@material-ui/core'
 
 const now = new Date()
 

@@ -27,6 +27,8 @@ import Popper from '@material-ui/core/Popper';
 import Firebase from '../auth';
 import Profile from './dasboard_pages/Profile';
 
+let url = window.location.href
+
 const styles = (theme) => ({
     root: {
         display: 'flex'
@@ -124,22 +126,26 @@ export class Dashboard extends React.Component {
         const {classes} = this.props;
 
         if (user) {
+
             return (
+
                 <div className={classes.dashboard}>
                     <BrowserRouter>
-                        <Redirect from={'/dashboard'} to={'/dashboard/frontpage'}/>
+                        <Redirect from={'dashboard'} to={'/dashboard/frontpage'}/>
                         <div className={classes.sidebar}>
                             <div className={classes.namedisplay}>
                                 <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
                                     <span>{user.displayName}</span>
                                     <ArrowDropDownIcon/>
                                 </div>
+
                                 <Popper
                                     open={Boolean(anchorEl)}
                                     anchororigin={{
                                     vertical: 'bottom'
                                 }}
                                     anchorEl={anchorEl}>
+
                                     <Paper>
                                         <ClickAwayListener onClickAway={this.handleClickAway}>
                                             <MenuList id="menu-list-grow">
