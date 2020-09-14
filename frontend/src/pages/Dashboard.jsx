@@ -185,7 +185,6 @@ export class Dashboard extends React.Component {
                 }}>
                     <div className={classes.dashboard}>
                         <BrowserRouter>
-                            <Redirect from={'dashboard'} to={'/dashboard/frontpage'} />
                             <div className={classes.sidebar}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
@@ -239,6 +238,9 @@ export class Dashboard extends React.Component {
                             </div>
                             <div className={classes.content}>
                                 <Switch>
+                                    <Route exact path="/dashboard">
+                                        <Redirect to="/dashboard/frontpage" />
+                                    </Route>
                                     <Route path="/dashboard/frontpage" component={Frontpage} />
                                     <Route path="/dashboard/calendar" component={Calendar} />
                                     <Route path="/dashboard/profile" component={Profile} />
