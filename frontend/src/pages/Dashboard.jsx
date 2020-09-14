@@ -1,5 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, withRouter, NavLink } from 'react-router-dom';
+import {
+    BrowserRouter,
+    Route,
+    Switch,
+    Link,
+    withRouter,
+    NavLink,
+    Redirect
+} from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -24,6 +32,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
+
+let url = window.location.href
 
 const styles = (theme) => ({
     root: {
@@ -66,13 +76,13 @@ const styles = (theme) => ({
         '&:hover': {
             'background-color': 'rgba(33, 150, 243, .15)',
             color: '#000'
-        },
+        }
     },
     'selected': {
         'background-color': 'rgba(33, 150, 243, .15)',
         'border-right': '6px solid rgb(33, 150, 243)',
         border: 'none',
-        color: 'rgb(33, 150, 243)',
+        color: 'rgb(33, 150, 243)'
     },
     none: {
         display: 'none'
@@ -153,6 +163,7 @@ export class Dashboard extends React.Component {
         const { classes } = this.props;
 
         if (user) {
+
             return (
                 <ConfigContext.Provider value={{
                     config: config,
@@ -173,6 +184,7 @@ export class Dashboard extends React.Component {
                 }}>
                     <div className={classes.dashboard}>
                         <BrowserRouter>
+                            <Redirect from={'dashboard'} to={'/dashboard/frontpage'} />
                             <div className={classes.sidebar}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
