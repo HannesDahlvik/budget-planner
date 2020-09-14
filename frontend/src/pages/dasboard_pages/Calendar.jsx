@@ -1,50 +1,32 @@
 import React from 'react'
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
+import {Calendar, momentLocalizer, Views} from 'react-big-calendar'
 import events from '../../utils/events'
 import * as dates from '../../utils/dates'
-import './Calendar.scss'
 import moment from 'moment'
-// import 'react-big-calendar/lib/css/react-big-calendar.css';
-// import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const now = new Date()
+let allViews = Object
+    .keys(Views)
+    .map(k => Views[k])
 
-class BigCalendar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            events: [
-                {
-                    ammount: '',
-                    title: '',
-                    start: '',
-                    end: '',
-                    type: ''
-                }
-            ]
-        }
+const ColoredDateCellWrapper = ({children}) => React.cloneElement(React.Children.only(children), {
+    style: {
+        backgroundColor: 'lightblue'
     }
+})
 
-    componentDidMount() {
-    }
+const local = momentLocalizer(moment)
 
-    render() {
+let Basic = () => (<Calendar
+    events={events}
+    views={allViews}
+    step={60}
+    showMultiDayTimes
+    max={dates.add(dates.endOf(new Date(), 'day'), -1, 'hours')}
+    defaultDate={new Date()}
+    components={{
+    timeSlotWrapper: ColoredDateCellWrapper
+}}
+    localizer={local}/>)
 
-        console.log(now);
-        const local = momentLocalizer(moment)
-        return (
-            <div>
-                <Calendar
-                    localizer={local}
-                    events={this.state.events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{
-                    height: 750
-                }}/>
-            </div>
-        )
-    }
-}
-
-export default BigCalendar
+export default Basic

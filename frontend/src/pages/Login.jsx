@@ -14,7 +14,7 @@ import {
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import OtherAuth from '../components/OtherAuth';
-import Firebase from '../Firebase';
+import Firebase from '../auth';
 import HomeButton from '../components/HomeButton';
 
 const classes = theme => ({
@@ -113,8 +113,8 @@ class Login extends React.Component {
                         </Button>
                             <Grid container>
                                 <Grid item xs>
-                                    <Link href="/forgotpassword" variant="body2">
-                                        {"Forgot password?"}
+                                    <Link href="#" variant="body2">
+                                        Forgot password?
                                 </Link>
                                 </Grid>
                                 <Grid item>
