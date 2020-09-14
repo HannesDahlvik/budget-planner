@@ -10,7 +10,6 @@ import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
 import Frontpage from './dasboard_pages/Frontpage';
 import Calendar from './dasboard_pages/Calendar';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -19,6 +18,12 @@ import Popper from '@material-ui/core/Popper';
 import Firebase from '../Firebase';
 import Profile from './dasboard_pages/Profile';
 import { ConfigContext } from '../ConfigContext';
+
+// Icons
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SettingsIcon from '@material-ui/icons/Settings';
+import HomeIcon from '@material-ui/icons/Home';
 
 const styles = (theme) => ({
     root: {
@@ -30,7 +35,7 @@ const styles = (theme) => ({
         'flex-direction': 'row',
     },
     sidebar: {
-        width: '25vw',
+        // width: '25vw',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
@@ -72,10 +77,6 @@ const styles = (theme) => ({
     none: {
         display: 'none'
     },
-    menuLink: {
-        textDecoration: 'none',
-        color: '#000'
-    },
     content: {
         width: '100%'
     },
@@ -84,6 +85,16 @@ const styles = (theme) => ({
         padding: '0 50px',
         bottom: '0',
         position: 'absolute'
+    },
+    menuItem: {
+        display: 'flex',
+        'justify-content': 'space-between',
+        textDecoration: 'none',
+        color: '#000',
+        width: '100%',
+    },
+    nameDropdownList: {
+        width: '200px',
     }
 })
 
