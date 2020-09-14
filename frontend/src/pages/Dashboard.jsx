@@ -100,7 +100,6 @@ export class Dashboard extends React.Component {
         }
     }
 
-<<<<<<< HEAD
     UNSAFE_componentWillMount() {
         fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
             const data = snapshot.val()
@@ -114,8 +113,6 @@ export class Dashboard extends React.Component {
         })
     }
 
-=======
->>>>>>> parent of 2e7e9ba... Merge branch 'master' into dashboard_frontpage
     handleDropdown = (e) => {
         this.setState({ anchorEl: e.currentTarget })
     }
