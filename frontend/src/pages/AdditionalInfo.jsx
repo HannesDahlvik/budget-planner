@@ -10,6 +10,9 @@ import {
 } from '@material-ui/core';
 import HomeButton from '../components/HomeButton';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Firebase from '../Firebase';
+import { withRouter } from 'react-router-dom';
+import ErrorHandler from '../ErrorHandler';
 
 const classes = theme => ({
     paper: {
@@ -29,7 +32,12 @@ const classes = theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    center: {
+        textAlign: 'center'
+    }
 });
+
+const fire = new Firebase()
 
 class AdditionalInfo extends React.Component {
     constructor(props) {
@@ -41,7 +49,12 @@ class AdditionalInfo extends React.Component {
     }
 
     doUpdateUsername(e) {
-        console.log(e.target.value);
+        e.preventDefault()
+        if (this.state.username !== '') {
+            fire.auth.currentUser.updateProfile({ displayName: this.state.username })
+                .then(() => this.props.history.push('/dashboard'))
+                .catch(err => new ErrorHandler(err.message))
+        }
     }
 
     render() {
@@ -67,12 +80,13 @@ class AdditionalInfo extends React.Component {
                                 required
                                 fullWidth
                                 id="username"
-                                label="username"
+                                label="Username"
                                 name="username"
                                 autoComplete="username"
                                 autoFocus
                                 onChange={e => this.setState({ username: e.target.value })}
                             />
+                            <Typography variant="body1" className={classes.center}>Username can be changed later on.</Typography>
                             <Button
                                 type="submit"
                                 fullWidth
@@ -91,4 +105,4 @@ class AdditionalInfo extends React.Component {
     }
 }
 
-export default withStyles(AdditionalInfo);
+export default withRouter(withStyles(classes)(AdditionalInfo));
