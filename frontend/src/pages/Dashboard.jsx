@@ -105,13 +105,12 @@ export class Dashboard extends React.Component {
         fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
             const data = snapshot.val()
 
-            if (data) {
-                const configObj = {
-                    currency: data.currency,
-                    dateFormat: data.dateFormat
-                }
-                this.setState({ config: configObj })
+            const configObj = {
+                currency: data.currency,
+                dateFormat: data.dateFormat
             }
+
+            this.setState({ config: configObj })
         })
     }
 
