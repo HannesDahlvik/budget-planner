@@ -18,6 +18,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Firebase from '../Firebase';
 import Profile from './dasboard_pages/Profile';
+import { ConfigContext } from '../ConfigContext';
 
 const styles = (theme) => ({
     root: {
@@ -26,7 +27,7 @@ const styles = (theme) => ({
     dashboard: {
         'font-family': 'Roboto',
         display: 'flex',
-        'flex-direction': 'row'
+        'flex-direction': 'row',
     },
     sidebar: {
         width: '25vw',
@@ -77,8 +78,16 @@ const styles = (theme) => ({
     },
     content: {
         width: '100%'
+    },
+    selectCurrency: {
+        margin: '20px auto',
+        padding: '0 50px',
+        bottom: '0',
+        position: 'absolute'
     }
 })
+
+const fire = new Firebase()
 
 export class Dashboard extends React.Component {
     static contextType = UserContext
@@ -87,8 +96,25 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {
             tabIndex: 0,
-            anchorEl: null
+            anchorEl: null,
+            config: {
+                currency: 'USD',
+                dateFormat: 'dd/MM/yyyy'
+            }
         }
+    }
+
+    UNSAFE_componentWillMount() {
+        fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
+            const data = snapshot.val()
+
+            const configObj = {
+                currency: data.currency,
+                dateFormat: data.dateFormat
+            }
+
+            this.setState({ config: configObj })
+        })
     }
 
     handleDropdown = (e) => {
@@ -112,73 +138,91 @@ export class Dashboard extends React.Component {
 
     render() {
         let user = this.context
-        const { tabIndex, anchorEl } = this.state
+        const { tabIndex, anchorEl, config } = this.state
         const { classes } = this.props;
 
         if (user) {
             return (
-                <div className={classes.dashboard}>
-                    <BrowserRouter>
-                        <div className={classes.sidebar}>
-                            <div className={classes.namedisplay}>
-                                <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
-                                    <span>{user.displayName}</span>
-                                    <ArrowDropDownIcon />
-                                </div>
-                                <Popper
-                                    open={Boolean(anchorEl)}
-                                    anchororigin={{
-                                        vertical: 'bottom'
-                                    }}
-                                    anchorEl={anchorEl}>
-                                    <Paper>
-                                        <ClickAwayListener onClickAway={this.handleClickAway}>
-                                            <MenuList id="menu-list-grow">
-                                                <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
-                                                <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
-                                                <MenuItem onClick={this.logout}>Log out</MenuItem>
-                                            </MenuList>
-                                        </ClickAwayListener>
-                                    </Paper>
-                                </Popper>
+                <ConfigContext.Provider value={{
+                    config: config,
+                    changeCurrency: (currency) => {
+                        const configObj = {
+                            currency: currency,
+                            dateFormat: this.state.config.dateFormat
+                        }
+                        this.setState({ config: configObj });
+                    },
+                    changeDateFormat: (format) => {
+                        const configObj = {
+                            currency: this.state.config.currency,
+                            dateFormat: format
+                        }
+                        this.setState({ config: configObj });
+                    }
+                }}>
+                    <div className={classes.dashboard}>
+                        <BrowserRouter>
+                            <div className={classes.sidebar}>
+                                <div className={classes.namedisplay}>
+                                    <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
+                                        <span>{user.displayName}</span>
+                                        <ArrowDropDownIcon />
+                                    </div>
+                                    <Popper
+                                        open={Boolean(anchorEl)}
+                                        anchororigin={{
+                                            vertical: 'bottom'
+                                        }}
+                                        anchorEl={anchorEl}>
+                                        <Paper>
+                                            <ClickAwayListener onClickAway={this.handleClickAway}>
+                                                <MenuList id="menu-list-grow">
+                                                    <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
+                                                    <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
+                                                    <MenuItem onClick={this.logout}>Log out</MenuItem>
+                                                </MenuList>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Popper>
 
+                                </div>
+                                <Tabs
+                                    value={tabIndex}
+                                    onChange={this.handleTabChange}
+                                    orientation="vertical"
+                                    variant='fullWidth'
+                                    className={classes.navtabs}
+                                    classes={{
+                                        indicator: classes.none
+                                    }}>
+                                    <Tab
+                                        className={classes.tab}
+                                        classes={{
+                                            selected: classes.selected
+                                        }}
+                                        label="Frontpage"
+                                        component={Link}
+                                        to="/dashboard/frontpage" />
+                                    <Tab
+                                        label="calendar"
+                                        className={classes.tab}
+                                        classes={{
+                                            selected: classes.selected
+                                        }}
+                                        component={Link}
+                                        to="/dashboard/calendar" />
+                                </Tabs>
                             </div>
-                            <Tabs
-                                value={tabIndex}
-                                onChange={this.handleTabChange}
-                                orientation="vertical"
-                                variant='fullWidth'
-                                className={classes.navtabs}
-                                classes={{
-                                    indicator: classes.none
-                                }}>
-                                <Tab
-                                    className={classes.tab}
-                                    classes={{
-                                        selected: classes.selected
-                                    }}
-                                    label="Frontpage"
-                                    component={Link}
-                                    to="/dashboard/frontpage" />
-                                <Tab
-                                    label="calendar"
-                                    className={classes.tab}
-                                    classes={{
-                                        selected: classes.selected
-                                    }}
-                                    component={Link}
-                                    to="/dashboard/calendar" />
-                            </Tabs>
-                        </div>
-                        <div className={classes.content}>
-                            <Switch>
-                                <Route path="/dashboard/frontpage" component={Frontpage} />
-                                <Route path="/dashboard/calendar" component={Calendar} />
-                                <Route path="/dashboard/profile" component={Profile} />
-                            </Switch>
-                        </div>
-                    </BrowserRouter>
-                </div>
+                            <div className={classes.content}>
+                                <Switch>
+                                    <Route path="/dashboard/frontpage" component={Frontpage} />
+                                    <Route path="/dashboard/calendar" component={Calendar} />
+                                    <Route path="/dashboard/profile" component={Profile} />
+                                </Switch>
+                            </div>
+                        </BrowserRouter>
+                    </div >
+                </ConfigContext.Provider>
             )
         } else {
             return (<Loader />)
@@ -186,4 +230,4 @@ export class Dashboard extends React.Component {
     }
 }
 
-export default withRouter(withStyles(styles)(Dashboard))
+export default withRouter(withStyles(styles)(Dashboard));

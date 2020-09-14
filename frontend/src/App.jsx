@@ -17,7 +17,7 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             user: null,
-            readyToRender: false,
+            readyToRender: false
         };
     }
 

@@ -1,10 +1,11 @@
 import React from 'react';
-import { withStyles, Icon, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import { withStyles, Icon, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem } from '@material-ui/core';
 import Firebase from '../../Firebase';
 import { Pie } from 'react-chartjs-2';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
 import ErrorHandler from '../../ErrorHandler';
+import { ConfigContext } from '../../ConfigContext';
 
 const classes = (theme) => ({
     root: {
@@ -148,26 +149,59 @@ const classes = (theme) => ({
         '&:hover': {
             backgroundColor: theme.palette.error.dark
         }
+    },
+    settingsText: {
+        textAlign: 'center',
+        marginBottom: '25px'
+    },
+    w100: {
+        width: '100%',
+        margin: '10px 0'
     }
 });
 
 const fire = new Firebase();
 
 class Profile extends React.Component {
-    state = {
-        showChangeUsername: false,
-        showAvatarEditButton: false,
-        showChangeAvatarModal: false,
-        username: '',
-        file: null,
-        src: null,
-        crop: {
-            unit: '%',
-            width: 30,
-            aspect: 1 / 1,
-            minWidth: 10,
-            minHeight: 10
-        },
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showChangeUsername: false,
+            showAvatarEditButton: false,
+            showChangeAvatarModal: false,
+            username: '',
+            file: null,
+            src: null,
+            currency: 'USD',
+            currencies: [
+                {
+                    value: 'USD',
+                    label: '$',
+                },
+                {
+                    value: 'EUR',
+                    label: '€',
+                },
+                {
+                    value: 'BTC',
+                    label: '฿',
+                },
+                {
+                    value: 'JPY',
+                    label: '¥',
+                },
+            ],
+            dateFormat: 'dd/MM/yyyy',
+            dateFormats: ["dd/MM/yyyy", "MM/dd/yyyy"],
+            crop: {
+                unit: '%',
+                width: 30,
+                aspect: 1 / 1,
+                minWidth: 10,
+                minHeight: 10
+            },
+        }
     }
 
     componentDidMount() {
@@ -243,17 +277,7 @@ class Profile extends React.Component {
         canvas.height = crop.height;
         const ctx = canvas.getContext('2d');
 
-        ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
-        );
+        ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
 
         return new Promise((resolve, reject) => {
             canvas.toBlob(blob => {
@@ -261,9 +285,7 @@ class Profile extends React.Component {
                     new ErrorHandler('Canvas is empty');
                     return;
                 }
-
                 this.setState({ file: blob });
-
                 blob.name = fileName;
                 window.URL.revokeObjectURL(this.fileUrl);
                 this.fileUrl = window.URL.createObjectURL(blob);
@@ -283,6 +305,20 @@ class Profile extends React.Component {
                 this.handleClose();
             }).catch(err => new ErrorHandler(err.message));
         }).catch(err => new ErrorHandler(err.message));
+    }
+
+    handleCurrencyChange = (value, context) => {
+        this.setState({ currency: value });
+        context.changeCurrency(value);
+
+        fire.doChangeSettingsForUser('currency', value);
+    }
+
+    handleDateFormatChange = (value, context) => {
+        this.setState({ dateFormat: value });
+        context.changeDateFormat(value);
+
+        fire.doChangeSettingsForUser('date', value);
     }
 
     render() {
@@ -319,79 +355,117 @@ class Profile extends React.Component {
         }
 
         return (
-            <>
-                {this.state.showChangeAvatarModal ? (
-                    <Dialog
-                        open={this.state.showChangeAvatarModal}
-                        onClose={this.handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">{"Change profile picture"}</DialogTitle>
-                        <DialogContent className={classes.avatarDialogContent}>
-                            <label className={classes.selectAvatarLabel} htmlFor="select-avatar-input">Select image</label>
-                            <input onChange={this.onSelectFile} className={classes.none} id="select-avatar-input" type="file" accept="image/*"></input>
-                            {src && (
-                                <ReactCrop
-                                    src={src}
-                                    crop={crop}
-                                    circularCrop={true}
-                                    onImageLoaded={this.onImageLoaded}
-                                    onComplete={this.onCropComplete}
-                                    onChange={this.onCropChange}
-                                />
-                            )}
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.handleClose} className={classes.redBg} color="primary" variant="contained">Cancel</Button>
-                            <Button onClick={this.saveAvatarChanges} color="primary" variant="contained">Save</Button>
-                        </DialogActions>
-                    </Dialog>
-                ) : (<></>)}
+            <ConfigContext.Consumer>
+                {context => (
+                    <>
+                        {this.state.showChangeAvatarModal ? (
+                            <Dialog
+                                open={this.state.showChangeAvatarModal}
+                                onClose={this.handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">{"Change profile picture"}</DialogTitle>
+                                <DialogContent className={classes.avatarDialogContent}>
+                                    <label className={classes.selectAvatarLabel} htmlFor="select-avatar-input">Select image</label>
+                                    <input onChange={this.onSelectFile} className={classes.none} id="select-avatar-input" type="file" accept="image/*"></input>
+                                    {src && (
+                                        <ReactCrop
+                                            src={src}
+                                            crop={crop}
+                                            circularCrop={true}
+                                            onImageLoaded={this.onImageLoaded}
+                                            onComplete={this.onCropComplete}
+                                            onChange={this.onCropChange}
+                                        />
+                                    )}
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClose} className={classes.redBg} color="primary" variant="contained">Cancel</Button>
+                                    <Button onClick={this.saveAvatarChanges} color="primary" variant="contained">Save</Button>
+                                </DialogActions>
+                            </Dialog>
+                        ) : (<></>)}
 
-                <div className={`${classes.root} profile-page`}>
-                    <div className={classes.infoPanel}>
-                        <div className={`${classes.box} ${classes.height}`}>
-                            <div className={classes.avatarWrapper}>
-                                <img onMouseEnter={() => this.setState({ showAvatarEditButton: true })} onMouseLeave={() => this.setState({ showAvatarEditButton: false })} className={classes.avatar} src={fire.auth.currentUser.photoURL} alt="Avatar" />
-                                {this.state.showAvatarEditButton ? (
-                                    <div onClick={this.changeAvatar} onMouseEnter={() => this.setState({ showAvatarEditButton: true })} onMouseLeave={() => this.setState({ showAvatarEditButton: false })} className={classes.avatarEditButton}>
-                                        <Icon className={classes.avatarEditButtonIcon}>add_a_photo</Icon>
+                        <div className={`${classes.root} profile-page`}>
+                            <div className={classes.infoPanel}>
+                                <div className={`${classes.box} ${classes.height}`}>
+                                    <div className={classes.avatarWrapper}>
+                                        <img onMouseEnter={() => this.setState({ showAvatarEditButton: true })} onMouseLeave={() => this.setState({ showAvatarEditButton: false })} className={classes.avatar} src={fire.auth.currentUser.photoURL} alt="Avatar" />
+                                        {this.state.showAvatarEditButton ? (
+                                            <div onClick={this.changeAvatar} onMouseEnter={() => this.setState({ showAvatarEditButton: true })} onMouseLeave={() => this.setState({ showAvatarEditButton: false })} className={classes.avatarEditButton}>
+                                                <Icon className={classes.avatarEditButtonIcon}>add_a_photo</Icon>
+                                            </div>
+                                        ) : (
+                                                <></>
+                                            )}
                                     </div>
-                                ) : (
-                                        <></>
-                                    )}
+                                    <div className={classes.changerWrapper}>
+                                        {this.state.showChangeUsername ? (
+                                            <>
+                                                <form onSubmit={(e) => this.changeDisplayName(e)}>
+                                                    <Button className={`${classes.changeButton} ${classes.redButton}`} variant="contained" onClick={() => this.setState({ showChangeUsername: false })}><Icon>clear</Icon></Button>
+                                                    <TextField defaultValue={fire.auth.currentUser.displayName} onChange={(e) => this.setState({ username: e.target.value })} />
+                                                    <Button className={classes.changeButton} color="primary" variant="contained" onClick={this.changeDisplayName}><Icon>done</Icon></Button>
+                                                </form>
+                                            </>
+                                        ) : (
+                                                <>
+                                                    <Typography variant="h5">{username}</Typography>
+                                                    <Icon onClick={() => this.setState({ showChangeUsername: true })} className={classes.changeIcon}>create</Icon>
+                                                </>
+                                            )}
+                                    </div>
+                                    <Typography variant="h5">{fire.auth.currentUser.email}</Typography>
+                                </div>
                             </div>
-                            <div className={classes.changerWrapper}>
-                                {this.state.showChangeUsername ? (
-                                    <>
-                                        <form onSubmit={(e) => this.changeDisplayName(e)}>
-                                            <Button className={`${classes.changeButton} ${classes.redButton}`} variant="contained" onClick={() => this.setState({ showChangeUsername: false })}><Icon>clear</Icon></Button>
-                                            <TextField defaultValue={fire.auth.currentUser.displayName} onChange={(e) => this.setState({ username: e.target.value })} />
-                                            <Button className={classes.changeButton} color="primary" variant="contained" onClick={this.changeDisplayName}><Icon>done</Icon></Button>
-                                        </form>
-                                    </>
-                                ) : (
-                                        <>
-                                            <Typography variant="h5">{username}</Typography>
-                                            <Icon onClick={() => this.setState({ showChangeUsername: true })} className={classes.changeIcon}>create</Icon>
-                                        </>
-                                    )}
+                            <div className={`${classes.infoPanel} ${classes.rightPanel} profile-right-info-panel`}>
+                                <div className={`${classes.box} ${classes.side}`}>
+                                    <Typography className={classes.settingsText} variant="h5">Settings</Typography>
+                                    {this.state.currencies ? (
+                                        <TextField
+                                            id="currency-field"
+                                            select
+                                            value={context.config.currency}
+                                            onChange={(e) => this.handleCurrencyChange(e.target.value, context)}
+                                            variant="outlined"
+                                            label="Select your currency"
+                                            className={classes.w100}
+                                        >
+                                            {this.state.currencies.map((option, i) => (
+                                                <MenuItem key={option.value} value={option.value} >
+                                                    {option.value}, { option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    ) : <></>}
+                                    {this.state.dateFormats ? (
+                                        <TextField
+                                            id="date-format-field"
+                                            select
+                                            value={context.config.dateFormat}
+                                            onChange={(e) => this.handleDateFormatChange(e.target.value, context)}
+                                            variant="outlined"
+                                            label="Select your prefferd date format"
+                                            className={classes.w100}
+                                        >
+                                            {this.state.dateFormats.map((option, i) => (
+                                                <MenuItem key={option} value={option} >
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    ) : <></>}
+                                </div>
+                                <div className={`${classes.box} ${classes.side} ${classes.pieChart}`}>
+                                    <Typography className={classes.pieChartText} variant="h5">Text</Typography>
+                                    <Pie className={classes.chart} data={data} options={options} />
+                                </div>
                             </div>
-                            <Typography variant="h5">{fire.auth.currentUser.email}</Typography>
                         </div>
-                    </div>
-                    <div className={`${classes.infoPanel} ${classes.rightPanel} profile-right-info-panel`}>
-                        <div className={`${classes.box} ${classes.side}`}>
-
-                        </div>
-                        <div className={`${classes.box} ${classes.side} ${classes.pieChart}`}>
-                            <Typography className={classes.pieChartText} variant="h5">Text</Typography>
-                            <Pie className={classes.chart} data={data} options={options} />
-                        </div>
-                    </div>
-                </div>
-            </>
+                    </>
+                )}
+            </ConfigContext.Consumer>
         );
     }
 }
