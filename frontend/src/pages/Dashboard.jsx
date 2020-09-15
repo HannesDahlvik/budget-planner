@@ -45,7 +45,7 @@ const styles = (theme) => ({
         'flex-direction': 'row',
     },
     sidebar: {
-        // width: '25vw',
+        width: '25vw',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
@@ -87,6 +87,10 @@ const styles = (theme) => ({
     none: {
         display: 'none'
     },
+    menuLink: {
+        textDecoration: 'none',
+        color: '#000'
+    },
     content: {
         width: '100%'
     },
@@ -95,16 +99,6 @@ const styles = (theme) => ({
         padding: '0 50px',
         bottom: '0',
         position: 'absolute'
-    },
-    menuItem: {
-        display: 'flex',
-        'justify-content': 'space-between',
-        textDecoration: 'none',
-        color: '#000',
-        width: '100%',
-    },
-    nameDropdownList: {
-        width: '200px',
     }
 })
 
