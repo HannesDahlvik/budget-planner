@@ -19,9 +19,6 @@ app.analytics(firebaseApp);
 class Firebase {
     constructor() {
         this.auth = app.auth();
-        this.storage = app.storage();
-        this.database = app.database();
-
         this.authed = this.auth.currentUser;
         this.firebase = firebaseApp;
 
@@ -78,37 +75,9 @@ class Firebase {
             returnData = res.metadata.fullPath;
         }).catch(err => new ErrorHandler(err.message));
         const imageURL = await this.storage.ref(returnData).getDownloadURL();
-
-        return imageURL;
     }
 
-    doRemoveLastUsedProfilePicutre() {
-        const imageToDelete = this.storage.refFromURL(this.auth.currentUser.photoURL);
-        if (imageToDelete) {
-            imageToDelete.delete();
-        }
-    }
-
-    doChangeSettingsForUser(type, value) {
-        const ref = this.database.ref(`${this.auth.currentUser.uid}/settings`);
-
-        switch (type) {
-            case 'currency': {
-                ref.update({
-                    currency: value
-                });
-                break;
-            }
-            case 'date': {
-                ref.update({
-                    dateFormat: value
-                });
-                break;
-            }
-            default:
-                break;
-        }
-    }
+    doSignOut = () => this.auth.signOut();
 }
 
 export default Firebase;

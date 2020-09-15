@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import OtherAuth from '../components/OtherAuth';
-import Firebase from '../Firebase';
+import Firebase from '../auth';
 import ErrorHandler from '../ErrorHandler';
 import { withRouter } from 'react-router-dom';
 import HomeButton from '../components/HomeButton';
