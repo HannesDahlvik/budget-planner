@@ -17,6 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Firebase from '../auth';
 import Profile from './dasboard_pages/Profile';
+import { ConfigContext } from '../ConfigContext';
 
 // Icons
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -86,6 +87,7 @@ const styles = (theme) => ({
         padding: '0 50px',
         bottom: '0',
         position: 'absolute'
+    },
     menuItem: {
         display: 'flex',
         'justify-content': 'space-between',
@@ -205,19 +207,19 @@ export class Dashboard extends React.Component {
                                         component={Link}
                                         to="/dashboard/calendar" />
                                 </Tabs>
-                            </Grid>
-                            <Grid className={classes.content} item xs={9}>
-                                <Switch>
-                                    <Route exact path="/dashboard">
-                                        <Redirect to="/dashboard/frontpage" />
-                                    </Route>
-                                    <Route path="/dashboard/frontpage" component={Frontpage} />
-                                    <Route path="/dashboard/calendar" component={Calendar} />
-                                    <Route path="/dashboard/profile" component={Profile} />
-                                </Switch>
+                                <Grid className={classes.content} item xs={9}>
+                                    <Switch>
+                                        <Route exact path="/dashboard">
+                                            <Redirect to="/dashboard/frontpage" />
+                                        </Route>
+                                        <Route path="/dashboard/frontpage" component={Frontpage} />
+                                        <Route path="/dashboard/calendar" component={Calendar} />
+                                        <Route path="/dashboard/profile" component={Profile} />
+                                    </Switch>
+                                </Grid>
                             </div>
                         </BrowserRouter>
-                    </div >
+                    </Grid >
                 </ConfigContext.Provider>
             )
         } else {
