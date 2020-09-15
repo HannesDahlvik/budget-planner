@@ -157,6 +157,9 @@ const classes = (theme) => ({
     w100: {
         width: '100%',
         margin: '10px 0'
+    },
+    settingsPanel: {
+        padding: '25px 75px'
     }
 });
 
@@ -420,7 +423,7 @@ class Profile extends React.Component {
                                 </div>
                             </div>
                             <div className={`${classes.infoPanel} ${classes.rightPanel} profile-right-info-panel`}>
-                                <div className={`${classes.box} ${classes.side}`}>
+                                <div className={`${classes.box} ${classes.side} ${classes.settingsPanel}`}>
                                     <Typography className={classes.settingsText} variant="h5">Settings</Typography>
                                     {this.state.currencies ? (
                                         <TextField

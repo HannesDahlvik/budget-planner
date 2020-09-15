@@ -20,8 +20,7 @@
     "react-image-crop": "^8.6.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "react-toastify": "^6.0.8",
-    "recharts": "^1.8.5"
+    "react-toastify": "^6.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
