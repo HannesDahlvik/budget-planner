@@ -1,5 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, withRouter, NavLink } from 'react-router-dom';
+import {
+    BrowserRouter,
+    Route,
+    Switch,
+    Link,
+    withRouter,
+    NavLink,
+    Redirect
+} from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,14 +17,23 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
 import Frontpage from './dasboard_pages/Frontpage';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Calendar from './dasboard_pages/Calendar';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import Profile from './dasboard_pages/Profile';
+import { ConfigContext } from '../ConfigContext';
+
+// Icons
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SettingsIcon from '@material-ui/icons/Settings';
+import HomeIcon from '@material-ui/icons/Home';
+
+let url = window.location.href
 
 const styles = (theme) => ({
     root: {
@@ -28,9 +45,9 @@ const styles = (theme) => ({
         'flex-direction': 'row',
     },
     sidebar: {
-        width: '25vw',
+        // width: '25vw',
         height: '100vh',
-        'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)',
+        'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
     namedisplay: {
         display: 'flex',
@@ -38,7 +55,7 @@ const styles = (theme) => ({
         'text-align': 'center',
         'padding-top': '3vh',
         'padding-bottom': '3vh',
-        'flex-direction': 'column',
+        'flex-direction': 'column'
     },
     namedropdown: {
         display: 'flex',
@@ -50,7 +67,7 @@ const styles = (theme) => ({
     navtabs: {
         flexGrow: 1,
         display: 'flex',
-        height: 224,
+        height: 224
     },
     tab: {
         transition: '.25s',
@@ -59,25 +76,39 @@ const styles = (theme) => ({
         '&:hover': {
             'background-color': 'rgba(33, 150, 243, .15)',
             color: '#000'
-        },
+        }
     },
     'selected': {
         'background-color': 'rgba(33, 150, 243, .15)',
         'border-right': '6px solid rgb(33, 150, 243)',
         border: 'none',
-        color: 'rgb(33, 150, 243)',
+        color: 'rgb(33, 150, 243)'
     },
     none: {
         display: 'none'
     },
-    menuLink: {
-        textDecoration: 'none',
-        color: '#000'
-    },
     content: {
         width: '100%'
+    },
+    selectCurrency: {
+        margin: '20px auto',
+        padding: '0 50px',
+        bottom: '0',
+        position: 'absolute'
+    },
+    menuItem: {
+        display: 'flex',
+        'justify-content': 'space-between',
+        textDecoration: 'none',
+        color: '#000',
+        width: '100%',
+    },
+    nameDropdownList: {
+        width: '200px',
     }
 })
+
+const fire = new Firebase()
 
 export class Dashboard extends React.Component {
     static contextType = UserContext
@@ -87,7 +118,25 @@ export class Dashboard extends React.Component {
         this.state = {
             tabIndex: 0,
             anchorEl: null,
+            config: {
+                currency: 'USD',
+                dateFormat: 'dd/MM/yyyy'
+            }
         }
+    }
+
+    UNSAFE_componentWillMount() {
+        fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
+            const data = snapshot.val()
+
+            if (data) {
+                const configObj = {
+                    currency: data.currency,
+                    dateFormat: data.dateFormat
+                }
+                this.setState({ config: configObj })
+            }
+        })
     }
 
     handleDropdown = (e) => {
@@ -103,59 +152,103 @@ export class Dashboard extends React.Component {
     }
 
     logout = () => {
-        new Firebase().doSignOut().then((res) =>
-            this.props.history.push('/')
-        ).catch(err => console.log(err))
+        new Firebase()
+            .doSignOut()
+            .then((res) => this.props.history.push('/'))
+            .catch(err => console.log(err))
     }
 
     render() {
         let user = this.context
-        const { tabIndex, anchorEl } = this.state
+        const { tabIndex, anchorEl, config } = this.state
         const { classes } = this.props;
 
         if (user) {
+
             return (
-                <div className={classes.dashboard}>
-                    <BrowserRouter>
-                        <div className={classes.sidebar}>
-                            <div className={classes.namedisplay}>
-                                <div
-                                    className={classes.namedropdown}
-                                    onClick={(e) => this.handleDropdown(e)}
-                                >
-                                    <span>{user.displayName}</span>
-                                    <ArrowDropDownIcon />
+                <ConfigContext.Provider value={{
+                    config: config,
+                    changeCurrency: (currency) => {
+                        const configObj = {
+                            currency: currency,
+                            dateFormat: this.state.config.dateFormat
+                        }
+                        this.setState({ config: configObj });
+                    },
+                    changeDateFormat: (format) => {
+                        const configObj = {
+                            currency: this.state.config.currency,
+                            dateFormat: format
+                        }
+                        this.setState({ config: configObj });
+                    }
+                }}>
+                    <div className={classes.dashboard}>
+                        <BrowserRouter>
+                            <div className={classes.sidebar}>
+                                <div className={classes.namedisplay}>
+                                    <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
+                                        <span>{user.displayName}</span>
+                                        <ArrowDropDownIcon />
+                                    </div>
+                                    <Popper
+                                        open={Boolean(anchorEl)}
+                                        anchororigin={{
+                                            vertical: 'bottom'
+                                        }}
+                                        anchorEl={anchorEl}>
+                                        <Paper>
+                                            <ClickAwayListener onClickAway={this.handleClickAway}>
+                                                <MenuList id="menu-list-grow">
+                                                    <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
+                                                    <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
+                                                    <MenuItem onClick={this.logout}>Log out</MenuItem>
+                                                </MenuList>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Popper>
+
                                 </div>
-                                <Popper open={Boolean(anchorEl)} anchororigin={{ vertical: 'bottom' }} anchorEl={anchorEl}>
-                                    <Paper>
-                                        <ClickAwayListener onClickAway={this.handleClickAway}>
-                                            <MenuList id="menu-list-grow">
-                                                <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
-                                                <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
-                                                <MenuItem onClick={this.logout}>Log out</MenuItem>
-                                            </MenuList>
-                                        </ClickAwayListener>
-                                    </Paper>
-                                </Popper>
-
-
+                                <Tabs
+                                    value={tabIndex}
+                                    onChange={this.handleTabChange}
+                                    orientation="vertical"
+                                    variant='fullWidth'
+                                    className={classes.navtabs}
+                                    classes={{
+                                        indicator: classes.none
+                                    }}>
+                                    <Tab
+                                        className={classes.tab}
+                                        classes={{
+                                            selected: classes.selected
+                                        }}
+                                        label="Frontpage"
+                                        component={Link}
+                                        to="/dashboard/frontpage" />
+                                    <Tab
+                                        label="calendar"
+                                        className={classes.tab}
+                                        classes={{
+                                            selected: classes.selected
+                                        }}
+                                        component={Link}
+                                        to="/dashboard/calendar" />
+                                </Tabs>
                             </div>
-                            <Tabs value={tabIndex} onChange={this.handleTabChange} orientation="vertical" variant='fullWidth' className={classes.navtabs}
-                                classes={{ indicator: classes.none }}
-                            >
-                                <Tab className={classes.tab} classes={{ selected: classes.selected }} label="Frontpage" component={Link} to="/dashboard/frontpage" />
-                                <Tab label="test" className={classes.tab} classes={{ selected: classes.selected }} component={Link} to="/dashboard/test" />
-                            </Tabs>
-                        </div>
-                        <div className={classes.content}>
-                            <Switch>
-                                <Route path="/dashboard/frontpage" component={Frontpage} />
-                                <Route path="/dashboard/test" component={test} />
-                                <Route path="/dashboard/profile" component={Profile} />
-                            </Switch>
-                        </div>
-                    </BrowserRouter>
-                </div>
+                            <div className={classes.content}>
+                                <Switch>
+                                    <Route exact path="/dashboard">
+                                        <Redirect to="/dashboard/frontpage" />
+                                    </Route>
+                                    <Route path="/dashboard/frontpage" component={Frontpage} />
+                                    <Route path="/dashboard/calendar" component={Calendar} />
+                                    <Route path="/dashboard/profile" component={Profile} />
+                                </Switch>
+                            </div>
+                        </BrowserRouter>
+                    </div >
+                </ConfigContext.Provider>
             )
         } else {
             return (<Loader />)
@@ -163,13 +256,4 @@ export class Dashboard extends React.Component {
     }
 }
 
-const test = () => {
-    return (
-        <div>
-            test content
-        </div>
-    )
-}
-
-
-export default withRouter(withStyles(styles)(Dashboard))
+export default withRouter(withStyles(styles)(Dashboard));

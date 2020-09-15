@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Divider, withStyles } from '@material-ui/core';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import ErrorHandler from '../ErrorHandler';
 import { withRouter } from 'react-router-dom';
 
@@ -37,8 +37,9 @@ class OtherAuth extends React.Component {
     }
 
     async doLoginWithGoogle() {
-        await fire.doSignInWithGoogle().catch(err => new ErrorHandler(err.message));
-        this.props.history.push('/dashboard');
+        await fire.doSignInWithGoogle()
+            .then(() => this.props.history.push('/dashboard'))
+            .catch(err => new ErrorHandler(err.message));
     }
 
     render() {
