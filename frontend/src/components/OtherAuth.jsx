@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Divider, withStyles } from '@material-ui/core';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import ErrorHandler from '../ErrorHandler';
 import { withRouter } from 'react-router-dom';
 

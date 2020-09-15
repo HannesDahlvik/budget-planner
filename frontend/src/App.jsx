@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch, useLocation } from 'r
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import SignUp from './pages/Signup';
-import Firebase from './auth';
+import Firebase from './Firebase';
 import Homepage from './pages/Homepage';
 import { UserContext } from './UserContext'
 import { Typography, Button } from '@material-ui/core';
@@ -16,7 +16,7 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             user: null,
-            readyToRender: false,
+            readyToRender: false
         };
     }
 

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { NavLink } from 'react-router-dom';
 import './Navbar.scss';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import ErrorHandler from '../ErrorHandler';
 import App from '../App';
 
@@ -61,9 +61,7 @@ class Navbar extends React.Component {
     }
 
     doLogout() {
-        new Firebase().doSignOut().then(res => {
-            console.log(res);
-        }).catch(err => new ErrorHandler(err.message));
+        new Firebase().doSignOut().catch(err => new ErrorHandler(err.message));
     }
 
     authListener = () => {

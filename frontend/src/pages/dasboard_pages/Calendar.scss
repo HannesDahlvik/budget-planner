@@ -1,0 +1,13 @@
+.rbc-btn-group button {
+    background-color: #2196f3 !important;
+    color: #fff !important;
+    outline: none !important;
+
+    &:hover {
+        background-color: darken($color: #2196f3, $amount: 14) !important;
+    }
+
+    &.rbc-active {
+        background-color: darken($color: #2196f3, $amount: 14) !important;
+    }
+}
