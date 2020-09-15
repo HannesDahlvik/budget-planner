@@ -32,7 +32,7 @@ const styles = (theme) => ({
         'font-family': 'Roboto',
     },
     sidebar: {
-        width: '25vw',
+        // width: '25vw',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
@@ -152,8 +152,9 @@ export class Dashboard extends React.Component {
                         this.setState({ config: configObj });
                     }
                 }}>
-                    <div className={classes.dashboard}>
+                    <Grid className={classes.dashboard} container>
                         <BrowserRouter>
+                            <Redirect from={'dashboard'} to={'/dashboard/frontpage'} />
                             <div className={classes.sidebar}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
@@ -168,10 +169,10 @@ export class Dashboard extends React.Component {
                                         anchorEl={anchorEl}>
                                         <Paper>
                                             <ClickAwayListener onClickAway={this.handleClickAway}>
-                                                <MenuList id="menu-list-grow">
-                                                    <MenuItem><NavLink className={classes.menuLink} to="/">Home</NavLink></MenuItem>
-                                                    <MenuItem><Link className={classes.menuLink} to="/dashboard/profile">Profile</Link></MenuItem>
-                                                    <MenuItem onClick={this.logout}>Log out</MenuItem>
+                                                <MenuList id="menu-list-grow" className={classes.nameDropdownList}>
+                                                    <MenuItem><NavLink className={classes.menuItem} to="/">Home <HomeIcon /></NavLink></MenuItem>
+                                                    <MenuItem><Link className={classes.menuItem} to="/dashboard/profile">Profile <SettingsIcon /></Link></MenuItem>
+                                                    <MenuItem onClick={this.logout} className={classes.menuItem}>Log out <ExitToAppIcon /></MenuItem>
                                                 </MenuList>
                                             </ClickAwayListener>
                                         </Paper>
@@ -204,8 +205,8 @@ export class Dashboard extends React.Component {
                                         component={Link}
                                         to="/dashboard/calendar" />
                                 </Tabs>
-                            </div>
-                            <div className={classes.content}>
+                            </Grid>
+                            <Grid className={classes.content} item xs={9}>
                                 <Switch>
                                     <Route exact path="/dashboard">
                                         <Redirect to="/dashboard/frontpage" />
@@ -215,41 +216,8 @@ export class Dashboard extends React.Component {
                                     <Route path="/dashboard/profile" component={Profile} />
                                 </Switch>
                             </div>
-                            <Tabs
-                                value={tabIndex}
-                                onChange={this.handleTabChange}
-                                orientation="vertical"
-                                variant='fullWidth'
-                                className={classes.navtabs}
-                                classes={{
-                                    indicator: classes.none
-                                }}>
-                                <Tab
-                                    className={classes.tab}
-                                    classes={{
-                                        selected: classes.selected
-                                    }}
-                                    label="Frontpage"
-                                    component={Link}
-                                    to="/dashboard/frontpage" />
-                                <Tab
-                                    label="calendar"
-                                    className={classes.tab}
-                                    classes={{
-                                        selected: classes.selected
-                                    }}
-                                    component={Link}
-                                    to="/dashboard/calendar" />
-                            </Tabs>
-                            <Grid item xs={9} className={classes.content}>
-                                <Switch>
-                                    <Route path="/dashboard/frontpage" component={Frontpage} />
-                                    <Route path="/dashboard/calendar" component={Calendar} />
-                                    <Route path="/dashboard/profile" component={Profile} />
-                                </Switch>
-                            </Grid>
                         </BrowserRouter>
-                    </div>
+                    </div >
                 </ConfigContext.Provider>
             )
         } else {
