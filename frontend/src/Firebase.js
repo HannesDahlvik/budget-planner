@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import firebase from 'firebase';
 import ErrorHandler from './ErrorHandler';
+import Notify from './Notify';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD186peFKoxgtKsi2vhrs1OZKc0iQwALlU",
@@ -76,6 +77,13 @@ class Firebase {
         if (imageToDelete) {
             imageToDelete.delete();
         }
+    }
+
+    async doForgetPassword(email) {
+        await firebase.auth().sendPasswordResetEmail(email)
+        .then(() => new Notify('Sent a email to ' + email))
+        .catch(e => new ErrorHandler(e.message))
+        return ''
     }
 }
 
