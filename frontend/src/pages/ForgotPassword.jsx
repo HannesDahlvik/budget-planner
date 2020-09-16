@@ -1,7 +1,6 @@
 import React from "react";
 import { TextField, Container, TableCell, withStyles, Button, Typography } from '@material-ui/core';
 import { Redirect, withRouter, Route } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Firebase from '../Firebase';
 

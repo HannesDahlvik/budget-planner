@@ -2,7 +2,7 @@ import {toast} from 'react-toastify';
 
 class Notify {
     constructor(message) {
-        toast(message)
+        toast.success(message)
     }
 }
 
