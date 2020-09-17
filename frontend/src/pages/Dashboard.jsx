@@ -33,7 +33,8 @@ const styles = (theme) => ({
         'font-family': 'Roboto',
     },
     sidebar: {
-        // width: '25vw',
+        maxWidth: '350px',
+        width: '100%',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
@@ -157,7 +158,7 @@ export class Dashboard extends React.Component {
                     <Grid className={classes.dashboard} container>
                         <BrowserRouter>
                             <Redirect from={'dashboard'} to={'/dashboard/frontpage'} />
-                            <div className={classes.sidebar}>
+                            <Grid className={classes.sidebar} item xs={3}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
                                         <span>{user.displayName}</span>
@@ -207,17 +208,17 @@ export class Dashboard extends React.Component {
                                         component={Link}
                                         to="/dashboard/calendar" />
                                 </Tabs>
-                                <Grid className={classes.content} item xs={9}>
-                                    <Switch>
-                                        <Route exact path="/dashboard">
-                                            <Redirect to="/dashboard/frontpage" />
-                                        </Route>
-                                        <Route path="/dashboard/frontpage" component={Frontpage} />
-                                        <Route path="/dashboard/calendar" component={Calendar} />
-                                        <Route path="/dashboard/profile" component={Profile} />
-                                    </Switch>
-                                </Grid>
-                            </div>
+                            </Grid>
+                            <Grid className={classes.content} item xs={9}>
+                                <Switch>
+                                    <Route exact path="/dashboard">
+                                        <Redirect to="/dashboard/frontpage" />
+                                    </Route>
+                                    <Route path="/dashboard/frontpage" component={Frontpage} />
+                                    <Route path="/dashboard/calendar" component={Calendar} />
+                                    <Route path="/dashboard/profile" component={Profile} />
+                                </Switch>
+                            </Grid>
                         </BrowserRouter>
                     </Grid >
                 </ConfigContext.Provider>
