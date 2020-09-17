@@ -18,8 +18,12 @@ app.analytics(firebaseApp);
 
 class Firebase {
     constructor() {
-        this.auth = app.auth();
-        this.authed = this.auth.currentUser;
+        this.auth = app.auth()
+        this.storage = app.storage()
+        this.database = app.database()
+
+        this.authed = this.auth.currentUser
+
         this.firebase = firebaseApp;
 
         this.googleAuthProvider = new firebase.auth.GoogleAuthProvider();

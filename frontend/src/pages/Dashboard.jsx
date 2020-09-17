@@ -15,7 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import Profile from './dasboard_pages/Profile';
 import { ConfigContext } from '../ConfigContext';
 
@@ -101,6 +101,8 @@ const styles = (theme) => ({
     }
 })
 
+const fire = new Firebase()
+
 export class Dashboard extends React.Component {
     static contextType = UserContext
 
@@ -108,8 +110,25 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {
             tabIndex: 0,
-            anchorEl: null
+            anchorEl: null,
+            config: {
+                currency: 'EUR',
+                dateFormat: 'dd/MM/yyyy'
+            }
         }
+    }
+
+    UNSAFE_componentWillMount() {
+        fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
+            const data = snapshot.val()
+
+            const configObj = {
+                currency: data.currency,
+                dateFormat: data.dateFormat
+            }
+
+            this.setState({ config: configObj })
+        })
     }
 
     handleDropdown = (e) => {
@@ -157,7 +176,6 @@ export class Dashboard extends React.Component {
                 }}>
                     <Grid className={classes.dashboard} container>
                         <BrowserRouter>
-                            <Redirect from={'dashboard'} to={'/dashboard/frontpage'} />
                             <Grid className={classes.sidebar} item xs={3}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
