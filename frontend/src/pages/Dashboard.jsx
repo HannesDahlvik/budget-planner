@@ -24,6 +24,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
+import ErrorHandler from '../ErrorHandler';
 
 const styles = (theme) => ({
     root: {
@@ -147,7 +148,7 @@ export class Dashboard extends React.Component {
         new Firebase()
             .doSignOut()
             .then((res) => this.props.history.push('/'))
-            .catch(err => console.log(err))
+            .catch(err => new ErrorHandler(err.message))
     }
 
     render() {

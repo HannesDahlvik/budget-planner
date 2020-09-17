@@ -298,7 +298,7 @@ class Profile extends React.Component {
     }
 
     saveAvatarChanges = async () => {
-        await fire.doRemoveLastUsedProfilePicutre();
+        await fire.doRemoveLastUsedProfilePicutre().catch(err => new ErrorHandler(err))
 
         await fire.doUploadProfilePicture(this.state.file).then(imageURL => {
             fire.auth.currentUser.updateProfile({
