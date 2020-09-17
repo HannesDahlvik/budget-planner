@@ -192,7 +192,7 @@ export class Dashboard extends React.Component {
                                         <Paper>
                                             <ClickAwayListener onClickAway={this.handleClickAway}>
                                                 <MenuList id="menu-list-grow" className={classes.nameDropdownList}>
-                                                    <MenuItem><NavLink className={classes.menuItem} to="/">Home <HomeIcon /></NavLink></MenuItem>
+                                                    <MenuItem onClick={() => this.props.history.push('/')}><NavLink className={classes.menuItem} to="/">Home <HomeIcon /></NavLink></MenuItem>
                                                     <MenuItem><Link className={classes.menuItem} to="/dashboard/profile">Profile <SettingsIcon /></Link></MenuItem>
                                                     <MenuItem onClick={this.logout} className={classes.menuItem}>Log out <ExitToAppIcon /></MenuItem>
                                                 </MenuList>
