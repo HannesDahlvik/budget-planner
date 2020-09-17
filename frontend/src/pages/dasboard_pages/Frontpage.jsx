@@ -9,8 +9,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import 'date-fns';
-import { format } from 'date-fns'
+import { format, getDate } from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
+
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
@@ -55,7 +56,7 @@ class Frontpage extends Component {
         super(props);
         this.state = {
             dialogs: [false, false, false, false],
-            selectedDate: Date.now(),
+            selectedDate: format(Date.now(), 'yyyy-MM-dd'),
             amount: null,
             title: null,
         }
@@ -69,7 +70,7 @@ class Frontpage extends Component {
     handleDialogOpen = (index) => {
         let tempArr = [false, false, false, false]
         tempArr[index] = true
-        this.setState({ dialogs: tempArr, selectedDate: Date.now() })
+        this.setState({ dialogs: tempArr, selectedDate: format(Date.now(), 'yyyy-MM-dd') })
     }
 
     handleDateChange = (e) => {
@@ -89,6 +90,20 @@ class Frontpage extends Component {
             min: 1,
         };
 
+        const handleSave = (e) => {
+            e.preventDefault();
+            const { title, amount, selectedDate } = this.state
+            // console.log(title);
+            // console.log(amount);
+            // console.log(selectedDate);
+            // this.setState({
+            //     title: '',
+            //     amount: '',
+            //     selectedDate: Date.now(),
+            // })
+            console.log(selectedDate);
+        }
+
         return (
             <Dialog
                 open={open}
@@ -96,42 +111,45 @@ class Frontpage extends Component {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-                <DialogContent>
-                    <Grid
-                        container
-                        direction="column"
-                        justify="center"
-                        alignItems="center"
-                    ><TextField id="title" onChange={this.handleChange} label="Title" variant="outlined" className={classes.dialogItem} />
-                        <TextField id="amount" onChange={this.handleChange} type="number" label="Amount" variant="outlined" className={classes.dialogItem} inputProps={inputProps} />
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <Grid container justify="space-around" className={classes.dialogItem}>
-                                <KeyboardDatePicker
-                                    disableToolbar
-                                    variant="inline"
-                                    format="dd/MM/yyyy"
-                                    margin="normal"
-                                    id="date-picker-inline"
-                                    label="Date picker inline"
-                                    value={selectedDate}
-                                    onChange={this.handleDateChange}
-                                    inputVariant="outlined"
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
-                                />
-                            </Grid>
-                        </MuiPickersUtilsProvider></Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.handleDialogClose}>
-                        Cancel
+                <form onSubmit={handleSave}>
+                    <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+                    <DialogContent>
+                        <Grid
+                            container
+                            direction="column"
+                            justify="center"
+                            alignItems="center"
+                        ><TextField id="title" onChange={this.handleChange} label="Title" variant="outlined" className={classes.dialogItem} required />
+                            <TextField id="amount" onChange={this.handleChange} type="number" label="Amount" variant="outlined" className={classes.dialogItem} inputProps={inputProps} required />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <Grid container justify="space-around" className={classes.dialogItem}>
+                                    <KeyboardDatePicker
+                                        disableToolbar
+                                        variant="inline"
+                                        format="dd/MM/yyyy"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label="Pick date"
+                                        value={selectedDate}
+                                        onChange={this.handleDateChange}
+                                        inputVariant="outlined"
+                                        required
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                    />
+                                </Grid>
+                            </MuiPickersUtilsProvider></Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleDialogClose}>
+                            Cancel
                 </Button>
-                    <Button onClick={this.handleDialogClose} autoFocus>
-                        Save
-                </Button>
-                </DialogActions>
+                        <Button type="submit" autoFocus>
+                            Save
+                        </Button>
+                    </DialogActions>
+                </form>
             </Dialog>
         )
     }
