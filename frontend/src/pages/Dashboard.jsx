@@ -160,7 +160,7 @@ export class Dashboard extends React.Component {
     logout = () => {
         new Firebase()
             .doSignOut()
-            .then((res) => this.props.history.push('/'))
+            .then(() => this.props.history.push('/'))
             .catch(err => new ErrorHandler(err.message))
     }
 

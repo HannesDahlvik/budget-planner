@@ -39,10 +39,12 @@ class Firebase {
     }
 
     doCreateUserWithEmailAndPassword = async (username, email, password) => {
-        await this.auth.createUserWithEmailAndPassword(email, password).then(result => result.user.updateProfile({
-            displayName: username
-        })).catch(err => new ErrorHandler(err.message));
-        this.doAddDefaultSettingsToDatabase()
+        await this.auth.createUserWithEmailAndPassword(email, password).then(result => {
+            result.user.updateProfile({
+                displayName: username
+            })
+            this.doAddDefaultSettingsToDatabase(result)
+        }).catch(err => new ErrorHandler(err.message));
     }
 
     doSignInWithEmailAndPassword = async (email, password) => {
@@ -52,13 +54,14 @@ class Firebase {
     }
 
     doSignInWithGoogle = async () => {
-        await this.auth.signInWithPopup(this.googleAuthProvider).then(() => {
+        await this.auth.signInWithPopup(this.googleAuthProvider).then((res) => {
             localStorage.setItem('user', JSON.stringify(this.auth.currentUser))
-            this.doAddDefaultSettingsToDatabase()
+            this.doAddDefaultSettingsToDatabase(res)
         }).catch(err => new ErrorHandler(err.message));
     }
 
     doAddDefaultSettingsToDatabase = async (info) => {
+        console.log(info);
         if (info.additionalUserInfo.isNewUser) {
             await this.database.ref(`${this.auth.currentUser.uid}/settings`).set({
                 currency: 'EUR',
@@ -120,6 +123,8 @@ class Firebase {
             .catch(e => new ErrorHandler(e.message))
         return ''
     }
+
+    doSignOut = () => this.auth.signOut()
 }
 
 export default Firebase;
