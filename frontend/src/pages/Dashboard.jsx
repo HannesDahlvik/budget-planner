@@ -15,7 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import Firebase from '../auth';
+import Firebase from '../Firebase';
 import Profile from './dasboard_pages/Profile';
 import { ConfigContext } from '../ConfigContext';
 
@@ -24,6 +24,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
+import ErrorHandler from '../ErrorHandler';
 
 const styles = (theme) => ({
     root: {
@@ -101,6 +102,8 @@ const styles = (theme) => ({
     }
 })
 
+const fire = new Firebase()
+
 export class Dashboard extends React.Component {
     static contextType = UserContext
 
@@ -108,8 +111,25 @@ export class Dashboard extends React.Component {
         super(props);
         this.state = {
             tabIndex: 0,
-            anchorEl: null
+            anchorEl: null,
+            config: {
+                currency: 'EUR',
+                dateFormat: 'dd/MM/yyyy'
+            }
         }
+    }
+
+    UNSAFE_componentWillMount() {
+        fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
+            const data = snapshot.val()
+
+            const configObj = {
+                currency: data.currency,
+                dateFormat: data.dateFormat
+            }
+
+            this.setState({ config: configObj })
+        })
     }
 
     handleDropdown = (e) => {
@@ -128,7 +148,7 @@ export class Dashboard extends React.Component {
         new Firebase()
             .doSignOut()
             .then((res) => this.props.history.push('/'))
-            .catch(err => console.log(err))
+            .catch(err => new ErrorHandler(err.message))
     }
 
     render() {
@@ -157,7 +177,6 @@ export class Dashboard extends React.Component {
                 }}>
                     <Grid className={classes.dashboard} container>
                         <BrowserRouter>
-                            <Redirect from={'dashboard'} to={'/dashboard/frontpage'} />
                             <Grid className={classes.sidebar} item xs={3}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
@@ -173,7 +192,7 @@ export class Dashboard extends React.Component {
                                         <Paper>
                                             <ClickAwayListener onClickAway={this.handleClickAway}>
                                                 <MenuList id="menu-list-grow" className={classes.nameDropdownList}>
-                                                    <MenuItem><NavLink className={classes.menuItem} to="/">Home <HomeIcon /></NavLink></MenuItem>
+                                                    <MenuItem onClick={() => this.props.history.push('/')}><NavLink className={classes.menuItem} to="/">Home <HomeIcon /></NavLink></MenuItem>
                                                     <MenuItem><Link className={classes.menuItem} to="/dashboard/profile">Profile <SettingsIcon /></Link></MenuItem>
                                                     <MenuItem onClick={this.logout} className={classes.menuItem}>Log out <ExitToAppIcon /></MenuItem>
                                                 </MenuList>

@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Route, Redirect, Switch, useLocation } from 'r
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import SignUp from './pages/Signup';
-import Firebase from './auth';
+import ForgotPassword from './pages/ForgotPassword';
+import Firebase from './Firebase';
 import Homepage from './pages/Homepage';
 import { UserContext } from './UserContext'
 import { Typography, Button } from '@material-ui/core';
@@ -67,6 +68,7 @@ export default class App extends React.Component {
                                 <PrivateRoute path="/dashboard"><Dashboard /></PrivateRoute>
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/signup" component={SignUp} />
+                                <Route exact path="/forgotpassword" component={ForgotPassword} />
                                 <Route exact path="/" component={Homepage} />
                                 <Route exact path="*" component={NoMatch} />
                             </Switch>
@@ -81,6 +83,7 @@ export default class App extends React.Component {
                                 <Route exact path="/dashboard"><Redirect to="/login" /></Route>
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/signup" component={SignUp} />
+                                <Route exact path="/forgotpassword" component={ForgotPassword} />
                                 <Route exact path="/" component={Homepage} />
                                 <Route exact path="*" component={NoMatch} />
                             </Switch>

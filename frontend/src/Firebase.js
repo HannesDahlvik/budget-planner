@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import firebase from 'firebase';
 import ErrorHandler from './ErrorHandler';
+import Notify from './Notify';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD186peFKoxgtKsi2vhrs1OZKc0iQwALlU",
@@ -18,8 +19,12 @@ app.analytics(firebaseApp);
 
 class Firebase {
     constructor() {
-        this.auth = app.auth();
-        this.authed = this.auth.currentUser;
+        this.auth = app.auth()
+        this.storage = app.storage()
+        this.database = app.database()
+
+        this.authed = this.auth.currentUser
+
         this.firebase = firebaseApp;
 
         this.googleAuthProvider = new firebase.auth.GoogleAuthProvider();
@@ -59,8 +64,6 @@ class Firebase {
         }).catch(err => new ErrorHandler(err.message))
     }
 
-    doSignOut = () => this.auth.signOut();
-
     doUploadProfilePicture = async (file) => {
         const metadata = {
             customMetadata: {
@@ -75,6 +78,44 @@ class Firebase {
             returnData = res.metadata.fullPath;
         }).catch(err => new ErrorHandler(err.message));
         const imageURL = await this.storage.ref(returnData).getDownloadURL();
+        return imageURL
+    }
+
+    doChangeSettingsForUser(type, value) {
+        const ref = this.database.ref(`${this.auth.currentUser.uid}/settings`);
+
+        switch (type) {
+            case 'currency': {
+                ref.update({
+                    currency: value
+                });
+                break;
+            }
+            case 'date': {
+                ref.update({
+                    dateFormat: value
+                });
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    async doRemoveLastUsedProfilePicutre() {
+        const imageToDelete = await this.storage.refFromURL(this.auth.currentUser.photoURL);
+        if (imageToDelete) {
+            await imageToDelete.delete().catch(err => new ErrorHandler(err.message))
+            return true
+        }
+        return false
+    }
+
+    async doForgetPassword(email) {
+        await firebase.auth().sendPasswordResetEmail(email)
+            .then(() => new Notify('Sent a email to ' + email))
+            .catch(e => new ErrorHandler(e.message))
+        return ''
     }
 
     doSignOut = () => this.auth.signOut();
