@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, withRouter, NavLink } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Link, withRouter, NavLink, Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -17,6 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Firebase from '../auth';
 import Profile from './dasboard_pages/Profile';
+import { ConfigContext } from '../ConfigContext';
 
 // Icons
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -32,7 +33,8 @@ const styles = (theme) => ({
         'font-family': 'Roboto',
     },
     sidebar: {
-        'max-width': '350px',
+        maxWidth: '350px',
+        width: '100%',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
     },
@@ -74,8 +76,18 @@ const styles = (theme) => ({
     none: {
         display: 'none'
     },
+    menuLink: {
+        textDecoration: 'none',
+        color: '#000'
+    },
     content: {
         width: '100%'
+    },
+    selectCurrency: {
+        margin: '20px auto',
+        padding: '0 50px',
+        bottom: '0',
+        position: 'absolute'
     },
     menuItem: {
         display: 'flex',
@@ -121,7 +133,7 @@ export class Dashboard extends React.Component {
 
     render() {
         let user = this.context
-        const { tabIndex, anchorEl } = this.state
+        const { tabIndex, anchorEl, config } = this.state
         const { classes } = this.props;
 
         if (user) {
@@ -199,6 +211,9 @@ export class Dashboard extends React.Component {
                             </Grid>
                             <Grid className={classes.content} item xs={9}>
                                 <Switch>
+                                    <Route exact path="/dashboard">
+                                        <Redirect to="/dashboard/frontpage" />
+                                    </Route>
                                     <Route path="/dashboard/frontpage" component={Frontpage} />
                                     <Route path="/dashboard/calendar" component={Calendar} />
                                     <Route path="/dashboard/profile" component={Profile} />

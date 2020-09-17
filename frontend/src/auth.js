@@ -20,7 +20,6 @@ class Firebase {
     constructor() {
         this.auth = app.auth();
         this.authed = this.auth.currentUser;
-
         this.firebase = firebaseApp;
 
         this.googleAuthProvider = new firebase.auth.GoogleAuthProvider();
@@ -34,20 +33,48 @@ class Firebase {
         }
     }
 
-    doCreateUserWithEmailAndPassword = (username, email, password) => {
-        this.auth.createUserWithEmailAndPassword(email, password).then(result => result.user.updateProfile({
+    doCreateUserWithEmailAndPassword = async (username, email, password) => {
+        await this.auth.createUserWithEmailAndPassword(email, password).then(result => result.user.updateProfile({
             displayName: username
         })).catch(err => new ErrorHandler(err.message));
+        this.doAddDefaultSettingsToDatabase()
     }
 
-    doSignInWithEmailAndPassword = (email, password) => {
-        this.auth.signInWithEmailAndPassword(email, password).catch(err => new ErrorHandler(err.message));
+    doSignInWithEmailAndPassword = async (email, password) => {
+        await this.auth.signInWithEmailAndPassword(email, password).catch(err => new ErrorHandler(err.message));
+        this.doAddDefaultSettingsToDatabase()
     }
 
     doSignInWithGoogle = async () => {
-        await this.auth.signInWithPopup(this.googleAuthProvider).catch(err => new ErrorHandler(err.message));
+        await this.auth.signInWithPopup(this.googleAuthProvider).then(() => {
+            localStorage.setItem('user', JSON.stringify(this.auth.currentUser))
+            this.doAddDefaultSettingsToDatabase()
+        }).catch(err => new ErrorHandler(err.message));
+    }
 
-        localStorage.setItem('user', JSON.stringify(this.auth.currentUser));
+    doAddDefaultSettingsToDatabase = async () => {
+        await this.database.ref(`${this.auth.currentUser.uid}/settings`).set({
+            currency: 'EUR',
+            dateFormat: 'dd/MM/yyyy'
+        }).catch(err => new ErrorHandler(err.message))
+    }
+
+    doSignOut = () => this.auth.signOut();
+
+    doUploadProfilePicture = async (file) => {
+        const metadata = {
+            customMetadata: {
+                'uid': this.auth.currentUser.uid,
+                'name': `avatars/${file.name}`
+            }
+        }
+
+        let returnData;
+        const ref = this.storage.ref('avatars/' + file.name);
+        await ref.put(file, metadata).then(res => {
+            returnData = res.metadata.fullPath;
+        }).catch(err => new ErrorHandler(err.message));
+        const imageURL = await this.storage.ref(returnData).getDownloadURL();
     }
 
     doSignOut = () => this.auth.signOut();
