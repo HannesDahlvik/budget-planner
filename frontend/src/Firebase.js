@@ -103,9 +103,9 @@ class Firebase {
     }
 
     async doRemoveLastUsedProfilePicutre() {
-        const imageToDelete = this.storage.refFromURL(this.auth.currentUser.photoURL);
+        const imageToDelete = await this.storage.refFromURL(this.auth.currentUser.photoURL);
         if (imageToDelete) {
-            await imageToDelete.delete().catch(err => console.error(err.message))
+            await imageToDelete.delete().catch(err => new ErrorHandler(err.message))
             return true
         }
         return false

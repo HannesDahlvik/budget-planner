@@ -1,11 +1,12 @@
 import React from 'react';
-import { withStyles, Icon, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem } from '@material-ui/core';
+import { withStyles, Icon, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, CircularProgress } from '@material-ui/core';
 import Firebase from '../../Firebase';
 import { Pie } from 'react-chartjs-2';
 import { ConfigContext } from '../../ConfigContext';
 import 'react-image-crop/lib/ReactCrop.scss'
 import ReactCrop from 'react-image-crop';
 import ErrorHandler from '../../ErrorHandler';
+import { toast } from 'react-toastify';
 
 const classes = (theme) => ({
     root: {
@@ -160,6 +161,22 @@ const classes = (theme) => ({
     },
     settingsPanel: {
         padding: '25px 75px'
+    },
+    changingPfpSpinnerWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        backgroundColor: 'rgba(0, 0, 0, .5)',
+        top: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 99
+    },
+    changingPfpSpinner: {
+        width: '100%',
+        height: '100%',
+        zIndex: 99,
     }
 });
 
@@ -170,6 +187,7 @@ class Profile extends React.Component {
         super(props);
 
         this.state = {
+            changingPfp: false,
             showChangeUsername: false,
             showAvatarEditButton: false,
             showChangeAvatarModal: false,
@@ -298,13 +316,16 @@ class Profile extends React.Component {
     }
 
     saveAvatarChanges = async () => {
+        this.setState({ changingPfp: true })
+
         await fire.doRemoveLastUsedProfilePicutre().catch(err => new ErrorHandler(err))
 
         await fire.doUploadProfilePicture(this.state.file).then(imageURL => {
             fire.auth.currentUser.updateProfile({
                 photoURL: imageURL
             }).then(() => {
-                this.setState({ file: null, src: null, width: 30 });
+                this.setState({ file: null, src: null, width: 30, changingPfp: false });
+                toast.success('Changed profile picture')
                 this.handleClose();
             }).catch(err => new ErrorHandler(err.message));
         }).catch(err => new ErrorHandler(err.message));
@@ -380,12 +401,18 @@ class Profile extends React.Component {
                                             onImageLoaded={this.onImageLoaded}
                                             onComplete={this.onCropComplete}
                                             onChange={this.onCropChange}
-                                        />
+                                        >
+                                            {this.state.changingPfp ? (
+                                                <div className={classes.changingPfpSpinnerWrapper}>
+                                                    <CircularProgress size={64} thickness={4} className={classes.changingPfpSpinner} />
+                                                </div>
+                                            ) : <></>}
+                                        </ReactCrop>
                                     )}
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={this.handleClose} className={classes.redBg} color="primary" variant="contained">Cancel</Button>
-                                    <Button onClick={this.saveAvatarChanges} color="primary" variant="contained">Save</Button>
+                                    <Button onClick={this.saveAvatarChanges} color="primary" variant="contained">save</Button>
                                 </DialogActions>
                             </Dialog>
                         ) : (<></>)}
