@@ -1,5 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, withRouter, NavLink, Redirect } from 'react-router-dom';
+import {
+    BrowserRouter,
+    Route,
+    Switch,
+    Link,
+    withRouter,
+    NavLink,
+    Redirect
+} from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -26,12 +34,16 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 import ErrorHandler from '../ErrorHandler';
 
+let url = window.location.href
+
 const styles = (theme) => ({
     root: {
         display: 'flex'
     },
     dashboard: {
         'font-family': 'Roboto',
+        display: 'flex',
+        'flex-direction': 'row',
     },
     sidebar: {
         maxWidth: '350px',
@@ -66,13 +78,13 @@ const styles = (theme) => ({
         '&:hover': {
             'background-color': 'rgba(33, 150, 243, .15)',
             color: '#000'
-        },
+        }
     },
     'selected': {
         'background-color': 'rgba(33, 150, 243, .15)',
         'border-right': '6px solid rgb(33, 150, 243)',
         border: 'none',
-        color: 'rgb(33, 150, 243)',
+        color: 'rgb(33, 150, 243)'
     },
     none: {
         display: 'none'
@@ -123,12 +135,13 @@ export class Dashboard extends React.Component {
         fire.database.ref(`${fire.auth.currentUser.uid}/settings`).once('value').then(snapshot => {
             const data = snapshot.val()
 
-            const configObj = {
-                currency: data.currency,
-                dateFormat: data.dateFormat
+            if (data) {
+                const configObj = {
+                    currency: data.currency,
+                    dateFormat: data.dateFormat
+                }
+                this.setState({ config: configObj })
             }
-
-            this.setState({ config: configObj })
         })
     }
 
@@ -157,6 +170,7 @@ export class Dashboard extends React.Component {
         const { classes } = this.props;
 
         if (user) {
+
             return (
                 <ConfigContext.Provider value={{
                     config: config,
@@ -248,4 +262,4 @@ export class Dashboard extends React.Component {
     }
 }
 
-export default withRouter(withStyles(styles)(Dashboard))
+export default withRouter(withStyles(styles)(Dashboard));

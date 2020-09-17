@@ -46,8 +46,9 @@ class Firebase {
     }
 
     doSignInWithEmailAndPassword = async (email, password) => {
-        await this.auth.signInWithEmailAndPassword(email, password).catch(err => new ErrorHandler(err.message));
-        this.doAddDefaultSettingsToDatabase()
+        await this.auth.signInWithEmailAndPassword(email, password).then(res => {
+            this.doAddDefaultSettingsToDatabase(res)
+        }).catch(err => new ErrorHandler(err.message));
     }
 
     doSignInWithGoogle = async () => {
@@ -57,11 +58,13 @@ class Firebase {
         }).catch(err => new ErrorHandler(err.message));
     }
 
-    doAddDefaultSettingsToDatabase = async () => {
-        await this.database.ref(`${this.auth.currentUser.uid}/settings`).set({
-            currency: 'EUR',
-            dateFormat: 'dd/MM/yyyy'
-        }).catch(err => new ErrorHandler(err.message))
+    doAddDefaultSettingsToDatabase = async (info) => {
+        if (info.additionalUserInfo.isNewUser) {
+            await this.database.ref(`${this.auth.currentUser.uid}/settings`).set({
+                currency: 'EUR',
+                dateFormat: 'dd/MM/yyyy'
+            }).catch(err => new ErrorHandler(err.message))
+        }
     }
 
     doUploadProfilePicture = async (file) => {
@@ -117,8 +120,6 @@ class Firebase {
             .catch(e => new ErrorHandler(e.message))
         return ''
     }
-
-    doSignOut = () => this.auth.signOut();
 }
 
 export default Firebase;

@@ -16,6 +16,8 @@ import { withStyles } from '@material-ui/core/styles';
 import OtherAuth from '../components/OtherAuth';
 import Firebase from '../Firebase';
 import HomeButton from '../components/HomeButton';
+import ErrorHandler from '../ErrorHandler';
+import { withRouter } from 'react-router-dom';
 
 const classes = theme => ({
     paper: {
@@ -52,7 +54,9 @@ class Login extends React.Component {
     doLoginWithEmailAndPassword(e) {
         e.preventDefault();
         if (this.state.email !== '' || this.state.password !== '') {
-            fire.doSignInWithEmailAndPassword(this.state.email, this.state.password);
+            fire.doSignInWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+                this.props.history.push('/dashboard')
+            }).catch(err => new ErrorHandler(err.message))
         }
     }
 
@@ -113,9 +117,9 @@ class Login extends React.Component {
                         </Button>
                             <Grid container>
                                 <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                </Link>
+                                    <Link href="/forgotpassword" variant="body2">
+                                        {"Forgot password?"}
+                                    </Link>
                                 </Grid>
                                 <Grid item>
                                     <Link href="/signup" variant="body2">
@@ -133,4 +137,4 @@ class Login extends React.Component {
     }
 }
 
-export default withStyles(classes)(Login);
+export default withRouter(withStyles(classes)(Login));

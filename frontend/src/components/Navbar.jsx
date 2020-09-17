@@ -60,9 +60,7 @@ class Navbar extends React.Component {
     }
 
     doLogout() {
-        new Firebase().doSignOut().then(res => {
-            console.log(res);
-        }).catch(err => new ErrorHandler(err.message));
+        new Firebase().doSignOut().catch(err => new ErrorHandler(err.message));
     }
 
     authListener = () => {
