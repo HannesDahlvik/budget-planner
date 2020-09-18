@@ -22,6 +22,7 @@ class Firebase {
         this.auth = app.auth()
         this.storage = app.storage()
         this.database = app.database()
+        this.firestore = app.firestore()
 
         this.authed = this.auth.currentUser
 
@@ -106,6 +107,13 @@ class Firebase {
             default:
                 break;
         }
+    }
+
+    postPayment = async (type, data) => {
+        console.log(type);
+        const ref = await this.firestore.collection('financial_data').doc(`${this.auth.currentUser.uid}`)
+
+        ref.collection(type).add(data)
     }
 
     async doRemoveLastUsedProfilePicutre() {
