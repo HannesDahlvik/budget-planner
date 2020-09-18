@@ -20,8 +20,34 @@ import {
 } from '@material-ui/pickers';
 
 const styles = (theme) => ({
-    container: {
-        display: 'flex',
+    addPayDisplay: {
+        width: '50%',
+        height: '50%',
+    },
+    payDisplayItem: {
+        width: '50%',
+        height: '50%',
+        '& Button': {
+            color: 'white',
+            width: '75%',
+        },
+    },
+    redBg: {
+        'background-color': 'red',
+        '&:hover': {
+            'background-color': 'red',
+            opacity: '0.7',
+        }
+    },
+    greenBg: {
+        'background-color': 'green',
+        '&:hover': {
+            'background-color': 'green',
+            opacity: '0.7',
+        }
+    },
+    dialogItem: {
+        margin: '5px'
     }
 })
 
@@ -131,6 +157,7 @@ class Frontpage extends Component {
 
     render() {
         const { classes } = this.props
+        const { dialogs } = this.state
         return (
             <>
                 <Grid container justify-content="space-evenly" className={classes.addPayDisplay}>
