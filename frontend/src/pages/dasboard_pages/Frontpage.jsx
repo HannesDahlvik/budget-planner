@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import 'date-fns';
 import { format, getDate } from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
+import Firebase from '../../Firebase'
 
 import {
     MuiPickersUtilsProvider,
@@ -92,16 +93,17 @@ class Frontpage extends Component {
 
         const handleSave = (e) => {
             e.preventDefault();
-            const { title, amount, selectedDate } = this.state
-            // console.log(title);
-            // console.log(amount);
-            // console.log(selectedDate);
-            // this.setState({
-            //     title: '',
-            //     amount: '',
-            //     selectedDate: Date.now(),
-            // })
-            console.log(selectedDate);
+            let { title, amount } = this.state
+            amount = Number(amount)
+            if (negOrPos === 'negative') {
+                amount = amount - (amount * 2)
+            }
+            let data = {
+                title: title,
+                amount: amount,
+                date: selectedDate
+            }
+            new Firebase().postPayment(type, data)
         }
 
         return (
@@ -167,9 +169,9 @@ class Frontpage extends Component {
                         <Grid alignItems="center" justify="center" className={classes.payDisplayItem} container><Button onClick={() => this.handleDialogOpen(3)} variant="contained" classes={{ root: classes.greenBg }}>Add salary</Button></Grid>
                     </Grid>
                 </Grid>
-                {this.customDialog(dialogs[0], 'Add payment', 'single', 'negative')}
+                {this.customDialog(dialogs[0], 'Add payment', 'payments', 'negative')}
                 {this.customDialog(dialogs[1], 'Add subscription', 'subscription', 'negative')}
-                {this.customDialog(dialogs[2], 'Add received payment', 'single', 'positive')}
+                {this.customDialog(dialogs[2], 'Add received payment', 'payments', 'positive')}
                 {this.customDialog(dialogs[3], 'Add salary', 'subscription', 'positive')}
             </>
         );
