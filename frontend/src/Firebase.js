@@ -133,6 +133,26 @@ class Firebase {
     }
 
     doSignOut = () => this.auth.signOut()
+
+    async getCalendarData() {
+
+        const data = []
+
+        await this.firestore.collection('financial_data').doc(this.auth.currentUser.uid).collection('payments').get().then(res => {
+            res.forEach(doc => {
+                data.push(doc.data())
+            });
+        }).catch(err => new ErrorHandler(err.message))
+
+        await this.firestore.collection('financial_data').doc(this.auth.currentUser.uid).collection('subscriptions').get().then(res => {
+            res.forEach(doc => {
+                data.push(doc.data())
+            })
+        }).catch(err => new ErrorHandler(err.message))
+        console.log(data);
+        return data
+
+    }
 }
 
 export default Firebase;

@@ -169,9 +169,9 @@ class Frontpage extends Component {
                     </Grid>
                 </Grid>
                 {this.customDialog(dialogs[0], 'Add payment', 'payments', 'negative')}
-                {this.customDialog(dialogs[1], 'Add subscription', 'subscription', 'negative')}
+                {this.customDialog(dialogs[1], 'Add subscription', 'subscriptions', 'negative')}
                 {this.customDialog(dialogs[2], 'Add received payment', 'payments', 'positive')}
-                {this.customDialog(dialogs[3], 'Add salary', 'subscription', 'positive')}
+                {this.customDialog(dialogs[3], 'Add salary', 'subscriptions', 'positive')}
             </>
         );
     }
