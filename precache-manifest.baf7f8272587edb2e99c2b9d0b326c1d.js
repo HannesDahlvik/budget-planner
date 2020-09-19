@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "24ff9a39487f57feaa30121035c1d5ca",
+    "revision": "31ce6bfbc4364cdf1ee8faf4c38d700d",
     "url": "/budget-planner/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/budget-planner/static/css/2.cbbd8cd2.chunk.css"
   },
   {
-    "revision": "201208b7dcbba34fc1b4",
+    "revision": "b37acb9b27d7d1999e8b",
     "url": "/budget-planner/static/css/main.dc54b76a.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/budget-planner/static/js/2.e37130cd.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "201208b7dcbba34fc1b4",
-    "url": "/budget-planner/static/js/main.041c5d93.chunk.js"
+    "revision": "b37acb9b27d7d1999e8b",
+    "url": "/budget-planner/static/js/main.53b08e80.chunk.js"
   },
   {
     "revision": "9206da846e19df5eecaf",
