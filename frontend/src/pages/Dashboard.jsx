@@ -122,12 +122,12 @@ export class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabIndex: 0,
+            currentTab: this.props.location.pathname.split('/')[2],
             anchorEl: null,
             config: {
                 currency: 'EUR',
                 dateFormat: 'dd/MM/yyyy'
-            }
+            },
         }
     }
 
@@ -145,6 +145,10 @@ export class Dashboard extends React.Component {
         })
     }
 
+    componentDidMount() {
+        this.setState({ currentTab: this.props.location.pathname.split('/')[2] })
+    }
+
     handleDropdown = (e) => {
         this.setState({ anchorEl: e.currentTarget })
     }
@@ -153,8 +157,12 @@ export class Dashboard extends React.Component {
         this.setState({ anchorEl: null })
     }
 
-    handleTabChange = (event, value) => {
-        this.setState({ tabIndex: value })
+    tabStart = () => {
+        this.setState({ currentTab: this.props.location.pathname.split('/')[2] })
+    }
+
+    tabUpdate = (event, value) => {
+        this.setState({ currentTab: value })
     }
 
     logout = () => {
@@ -166,11 +174,10 @@ export class Dashboard extends React.Component {
 
     render() {
         let user = this.context
-        const { tabIndex, anchorEl, config } = this.state
+        const { currentTab, anchorEl, config } = this.state
         const { classes } = this.props;
 
-        if (user) {
-
+        if (user && currentTab) {
             return (
                 <ConfigContext.Provider value={{
                     config: config,
@@ -216,8 +223,8 @@ export class Dashboard extends React.Component {
 
                                 </div>
                                 <Tabs
-                                    value={tabIndex}
-                                    onChange={this.handleTabChange}
+                                    value={currentTab}
+                                    onChange={this.tabUpdate}
                                     orientation="vertical"
                                     variant='fullWidth'
                                     className={classes.navtabs}
@@ -229,6 +236,7 @@ export class Dashboard extends React.Component {
                                         classes={{
                                             selected: classes.selected
                                         }}
+                                        value="frontpage"
                                         label="Frontpage"
                                         component={Link}
                                         to="/dashboard/frontpage" />
@@ -238,6 +246,7 @@ export class Dashboard extends React.Component {
                                         classes={{
                                             selected: classes.selected
                                         }}
+                                        value="calendar"
                                         component={Link}
                                         to="/dashboard/calendar" />
                                 </Tabs>
@@ -257,7 +266,19 @@ export class Dashboard extends React.Component {
                 </ConfigContext.Provider>
             )
         } else {
-            return (<Loader />)
+            if (this.props.location.pathname.split('/')[2]) {
+                this.tabStart()
+            }
+            return (
+                <>
+                    <Loader />
+                    <Switch>
+                        <Route exact path="/dashboard">
+                            <Redirect to="/dashboard/frontpage" />
+                        </Route>
+                    </Switch>
+                </>
+            )
         }
     }
 }
