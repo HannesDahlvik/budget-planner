@@ -8,15 +8,14 @@ import Firebase from '../../Firebase';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import ErrorHandler from '../../ErrorHandler';
+import Loader from '../../components/Loader'
 
 class BigCalendar extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            events: [
-
-            ]
+            events: null
         }
     }
 
@@ -43,19 +42,26 @@ class BigCalendar extends React.Component {
     }
 
     render() {
+        const { events } = this.state
         const local = momentLocalizer(moment)
-        return (
-            <div>
-                <Calendar
-                    localizer={local}
-                    events={this.state.events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{
-                        height: 750
-                    }} />
-            </div>
-        )
+        if (events) {
+            return (
+                <div>
+                    <Calendar
+                        localizer={local}
+                        events={events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        style={{
+                            height: 750
+                        }} />
+                </div>
+            )
+        } else {
+            return (
+                <Loader />
+            )
+        }
     }
 }
 
