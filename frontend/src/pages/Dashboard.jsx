@@ -18,6 +18,7 @@ import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
 import Frontpage from './dasboard_pages/Frontpage';
 import Calendar from './dasboard_pages/Calendar';
+import Paylist from './dasboard_pages/Paylist';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -249,6 +250,14 @@ export class Dashboard extends React.Component {
                                         value="calendar"
                                         component={Link}
                                         to="/dashboard/calendar" />
+                                    <Tab
+                                        label="Paylist"
+                                        className={classes.tab}
+                                        classes={{
+                                            selected: classes.selected
+                                        }}
+                                        component={Link}
+                                        to="/dashboard/paylist" />
                                 </Tabs>
                             </Grid>
                             <Grid className={classes.content} item xs={9}>
@@ -259,6 +268,7 @@ export class Dashboard extends React.Component {
                                     <Route path="/dashboard/frontpage" component={Frontpage} />
                                     <Route path="/dashboard/calendar" component={Calendar} />
                                     <Route path="/dashboard/profile" component={Profile} />
+                                    <Route path="/dashboard/paylist" component={Paylist} />
                                 </Switch>
                             </Grid>
                         </BrowserRouter>
