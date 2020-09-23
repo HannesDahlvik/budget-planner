@@ -134,7 +134,7 @@ class Firebase {
 
     doSignOut = () => this.auth.signOut()
 
-    async getCalendarData() {
+    async getData() {
 
         const data = []
 
@@ -149,7 +149,6 @@ class Firebase {
                 data.push(doc.data())
             })
         }).catch(err => new ErrorHandler(err.message))
-        console.log(data);
         return data
 
     }

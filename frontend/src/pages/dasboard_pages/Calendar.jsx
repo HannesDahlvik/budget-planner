@@ -1,15 +1,13 @@
-import React from 'react'
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
-import events from '../../utils/events'
-import * as dates from '../../utils/dates'
-import './Calendar.scss'
-import moment from 'moment'
-import Firebase from '../../Firebase'
+import React from 'react';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import events from '../../utils/events';
+import * as dates from '../../utils/dates';
+import './Calendar.scss';
+import moment from 'moment';
+import Firebase from '../../Firebase';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import ErrorHandler from '../../ErrorHandler'
-
-const now = new Date()
+import ErrorHandler from '../../ErrorHandler';
 
 class BigCalendar extends React.Component {
 
@@ -25,7 +23,7 @@ class BigCalendar extends React.Component {
     componentDidMount() {
         const fire = new Firebase();
 
-        fire.getCalendarData()
+        fire.getData()
             .then((data) => {
                 let calendarData = []
                 for (let i = 0; i < data.length; i++) {
