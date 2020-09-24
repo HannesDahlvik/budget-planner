@@ -13,6 +13,7 @@ import { format, getDate } from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
 import Firebase from '../../Firebase'
 import Notify from '../../Notify';
+import ErrorHandler from '../../ErrorHandler';
 
 import {
     MuiPickersUtilsProvider,
@@ -61,8 +62,14 @@ class Frontpage extends Component {
             selectedDate: format(Date.now(), 'yyyy-MM-dd'),
             amount: null,
             title: null,
+            payments: null,
         }
     }
+
+    componentDidMount() {
+        this.getPayments()
+    }
+
 
     handleDialogClose = () => {
         let tempArr = [false, false, false, false]
@@ -84,6 +91,29 @@ class Frontpage extends Component {
         this.setState({ [e.currentTarget.id]: e.currentTarget.value })
     }
 
+    getPayments = () => {
+        const fire = new Firebase();
+
+        fire.getData()
+            .then((data) => {
+                let arr = []
+                for (let i = 0; i < data.length; i++) {
+                    const dataObj = {
+                        title: data[i].title,
+                        start: new Date(data[i].date),
+                        end: new Date(data[i].date),
+                        amount: data[i].amount,
+                        type: data[i].type
+                    }
+                    arr.push(dataObj)
+                }
+                this.setState({
+                    payments: arr
+                })
+
+            }).catch(err => new ErrorHandler(err.message))
+    }
+
     customDialog = (open, title, type, negOrPos) => {
         let { selectedDate } = this.state
         const { classes } = this.props
@@ -102,7 +132,8 @@ class Frontpage extends Component {
             let data = {
                 title: title,
                 amount: amount,
-                date: selectedDate
+                date: selectedDate,
+                type: type,
             }
             new Firebase().postPayment(type, data)
             new Notify('Saved successfully')
@@ -161,7 +192,8 @@ class Frontpage extends Component {
 
     render() {
         const { classes } = this.props
-        const { dialogs } = this.state
+        const { dialogs, payments } = this.state
+        console.log(payments);
         return (
             <>
                 <Grid container justify-content="space-evenly" className={classes.addPayDisplay}>
