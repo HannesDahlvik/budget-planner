@@ -18,6 +18,7 @@ import Tab from '@material-ui/core/Tab';
 import Loader from '../components/Loader'
 import Frontpage from './dasboard_pages/Frontpage';
 import Calendar from './dasboard_pages/Calendar';
+import Paylist from './dasboard_pages/Paylist';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -46,7 +47,7 @@ const styles = (theme) => ({
         'flex-direction': 'row',
     },
     sidebar: {
-        maxWidth: '350px',
+        // maxWidth: '350px',
         width: '100%',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
@@ -198,7 +199,7 @@ export class Dashboard extends React.Component {
                 }}>
                     <Grid className={classes.dashboard} container>
                         <BrowserRouter>
-                            <Grid className={classes.sidebar} item xs={3}>
+                            <Grid className={classes.sidebar} item xs={3} lg={2}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
                                         <span>{user.displayName}</span>
@@ -249,9 +250,17 @@ export class Dashboard extends React.Component {
                                         value="calendar"
                                         component={Link}
                                         to="/dashboard/calendar" />
+                                    <Tab
+                                        label="Paylist"
+                                        className={classes.tab}
+                                        classes={{
+                                            selected: classes.selected
+                                        }}
+                                        component={Link}
+                                        to="/dashboard/paylist" />
                                 </Tabs>
                             </Grid>
-                            <Grid className={classes.content} item xs={9}>
+                            <Grid className={classes.content} item xs={9} lg={10}>
                                 <Switch>
                                     <Route exact path="/dashboard">
                                         <Redirect to="/dashboard/frontpage" />
@@ -259,6 +268,7 @@ export class Dashboard extends React.Component {
                                     <Route path="/dashboard/frontpage" component={Frontpage} />
                                     <Route path="/dashboard/calendar" component={Calendar} />
                                     <Route path="/dashboard/profile" component={Profile} />
+                                    <Route path="/dashboard/paylist" component={Paylist} />
                                 </Switch>
                             </Grid>
                         </BrowserRouter>

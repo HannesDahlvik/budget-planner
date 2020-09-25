@@ -8,8 +8,8 @@ const style = makeStyles((theme) => ({
         'justify-content': 'center',
         'align-items': 'center',
         width: '100%',
-        height: '100%',
-        position: 'absolute',
+        height: '100vh',
+        // position: 'absolute',
     },
 }))
 
