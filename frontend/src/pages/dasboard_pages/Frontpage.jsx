@@ -12,6 +12,7 @@ import 'date-fns';
 import { format, getDate } from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
 import Firebase from '../../Firebase'
+import Notify from '../../Notify';
 
 import {
     MuiPickersUtilsProvider,
@@ -47,7 +48,8 @@ const styles = (theme) => ({
         }
     },
     dialogItem: {
-        margin: '5px'
+        margin: '5px',
+        width: '100%',
     }
 })
 
@@ -103,6 +105,8 @@ class Frontpage extends Component {
                 date: selectedDate
             }
             new Firebase().postPayment(type, data)
+            new Notify('Saved successfully')
+            this.handleDialogClose()
         }
 
         return (
@@ -122,8 +126,8 @@ class Frontpage extends Component {
                             alignItems="center"
                         ><TextField id="title" onChange={this.handleChange} label="Title" variant="outlined" className={classes.dialogItem} required />
                             <TextField id="amount" onChange={this.handleChange} type="number" label="Amount" variant="outlined" className={classes.dialogItem} inputProps={inputProps} required />
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <Grid container justify="space-around" className={classes.dialogItem}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} className={classes.dialogItem}>
+                                <Grid container justify="space-around">
                                     <KeyboardDatePicker
                                         disableToolbar
                                         variant="inline"
