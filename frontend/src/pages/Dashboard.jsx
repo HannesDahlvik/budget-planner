@@ -47,7 +47,7 @@ const styles = (theme) => ({
         'flex-direction': 'row',
     },
     sidebar: {
-        maxWidth: '350px',
+        // maxWidth: '350px',
         width: '100%',
         height: '100vh',
         'box-shadow': '5px 2px 25px -1px rgba(0,0,0,0.1)'
@@ -192,7 +192,7 @@ export class Dashboard extends React.Component {
                 }}>
                     <Grid className={classes.dashboard} container>
                         <BrowserRouter>
-                            <Grid className={classes.sidebar} item xs={3}>
+                            <Grid className={classes.sidebar} item xs={3} lg={2}>
                                 <div className={classes.namedisplay}>
                                     <div className={classes.namedropdown} onClick={(e) => this.handleDropdown(e)}>
                                         <span>{user.displayName}</span>
@@ -251,7 +251,7 @@ export class Dashboard extends React.Component {
                                         to="/dashboard/paylist" />
                                 </Tabs>
                             </Grid>
-                            <Grid className={classes.content} item xs={9}>
+                            <Grid className={classes.content} item xs={9} lg={10}>
                                 <Switch>
                                     <Route exact path="/dashboard">
                                         <Redirect to="/dashboard/frontpage" />

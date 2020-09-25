@@ -140,17 +140,31 @@ class Firebase {
 
         await this.firestore.collection('financial_data').doc(this.auth.currentUser.uid).collection('payments').get().then(res => {
             res.forEach(doc => {
-                data.push(doc.data())
+                let obj = doc.data()
+                obj.id = doc.id
+                obj.type = 'payments'
+                data.push(obj)
             });
         }).catch(err => new ErrorHandler(err.message))
 
         await this.firestore.collection('financial_data').doc(this.auth.currentUser.uid).collection('subscriptions').get().then(res => {
             res.forEach(doc => {
-                data.push(doc.data())
+                let obj = doc.data()
+                obj.id = doc.id
+                obj.type = 'subscriptions'
+                data.push(obj)
             })
         }).catch(err => new ErrorHandler(err.message))
         return data
 
+    }
+
+    async deleteData(id, type) {
+        await this.firestore.collection('financial_data').doc(this.auth.currentUser.uid).collection(type).doc(id).delete().then(function () {
+            new Notify("Document successfully deleted!");
+        }).catch(function (error) {
+            console.error("Error removing document: ", error);
+        });
     }
 }
 
